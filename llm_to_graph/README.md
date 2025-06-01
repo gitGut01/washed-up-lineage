@@ -107,5 +107,5 @@ After running the extraction, access your Neo4j database to view and query the l
 
 - Object nodes (tables, views, stored procedures)
 - Column nodes with type information
-- Relationships between objects (UPSTREAM_MODEL, UPSTREAM_STORED_PROCEDURE)
+- Relationships between objects (UPSTREAM_MODEL)
 - Relationships between columns and their parent objects
