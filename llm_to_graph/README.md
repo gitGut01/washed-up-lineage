@@ -32,26 +32,6 @@ A tool that leverages Large Language Models (LLMs) to extract information from S
 4. Set up environment variables:
    - Copy the `.env_example` file to `.env`
    - Add your Neo4j connection details (URI, username, password)
-   - Fill in other configuration values (see Environment Variables section)
-
-## Environment Variables
-
-The project uses a `.env` file for sensitive configuration. Create a `.env` file with the following variables:
-
-```
-# Neo4j Database Configuration
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USERNAME=neo4j
-NEO4J_PASSWORD=password
-
-# Google Vertex AI/Gemini Configuration (if using)
-token_pickle_path=path/to/token.pickle
-gemini_model=gemini-pro
-gemini_project=your-gcp-project-id
-
-# Ollama Configuration (if using)
-ollama_model=llama2
-```
 
 The `.env` file is included in `.gitignore` to ensure credentials aren't accidentally committed.
 
@@ -76,21 +56,24 @@ The project uses `config.py` for non-sensitive configuration:
 Example customization:
 
 ```python
-# In config.py
-DEFAULT_WAREHOUSE = "YOUR_WAREHOUSE"
+# Global configuration settings
+DEFAULT_WAREHOUSE = "MY_WAREHOUSE"
 WAREHOUSE_DEFAULT_SCHEMA_MAPPING = {
-    DEFAULT_WAREHOUSE: "your_schema",
-    "AnotherWarehouse": "another_schema"
+    DEFAULT_WAREHOUSE: "dbo",
+    "Organizer": "yo"
 }
+DO_SIMPLE_EXTRACT = True
+USE_ALREADY_EXTRACTED = True
+DEFAULT_EXTRACTION_DIR = "extraction_runs"
+PATH_EXTRACTION_RUNS = "BURGER_SIMPLE"
 
-# SQL file paths
+
+# SQL file paths for processing
 DATAMODEL_SQL_PATHTS = [
-    "../sql_scripts/YourProject/Tables",
-    "../sql_scripts/YourProject/Views"
+    "../example_sql_scripts/Burger"
 ]
 
 STORED_PROCEDURE_SQL_PATHS = [
-    "../sql_scripts/YourProject/StoredProcedure"
 ]
 ```
 

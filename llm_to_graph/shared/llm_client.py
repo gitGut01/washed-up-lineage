@@ -6,7 +6,7 @@ from langchain_ollama.llms import OllamaLLM
 # Google Vertex AI Configuration
 GEMINI_TOKEN_PICKLE_PATH='token.pickle'
 GEMINI_MODEL='gemini-1.5-pro-001'
-GEMINI_PROJECT='your-gcp-project'
+GEMINI_PROJECT='your-gcp-project-id'
 
 # Ollama Configuration
 OLLAMA_MODEL='llama3.2:3b-instruct-q4_K_M'
