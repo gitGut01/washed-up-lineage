@@ -1,0 +1,10 @@
+__pycache__/
+venv
+token.pickle
+.DS_Store
+TurleRacing404/
+CoconutTree/
+extraction_runs/
+mock_nodes_sql/
+backend/.env
+llm_to_graph/.env

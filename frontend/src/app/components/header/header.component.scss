@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+.back-arrow {
+    font-size: 0.7em; /* Slightly smaller */
+    margin-bottom: 2px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: color 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+        color: #0056b3;
+        cursor: pointer;
+    }
+}
+
+h1 {
+    font-size: 1em;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column; /* Stack h1 and back-arrow vertically */
+    justify-content: center;
+    margin-left: 1em;
+}
+
+
+.header {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 12px 0;
+    box-shadow: 0 2px 2px -2px gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 30px;
+    margin: 0;
+}
+
+.search {
+    position: absolute;
+    left: 20%;
+}
+
+

@@ -1,0 +1,108 @@
+<div class="info-panel" [class.open]="isOpen" [ngStyle]="{'width.px': panelWidth}">
+  <div class="resizer" (mousedown)="onResizeMouseDown($event)"></div>
+  <div class="header">
+    <div class="title-with-eye">
+      <h3>Datamodel Information</h3>
+      <div class="tooltip">
+        <button class="eye-button" [class.toggled]="lineageToggle" (click)="showLineage()">
+          <svg *ngIf="!lineageToggle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <svg *ngIf="lineageToggle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.269-2.943-9.543-7a10.05 10.05 0 012.223-3.877M6.22 6.22A9.969 9.969 0 0112 5c4.478 0 8.269 2.943 9.543 7a10.05 10.05 0 01-4.966 5.524M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+          </svg>
+        </button>
+        <span class="tooltiptext">Show Lineage</span>
+      </div>
+    </div>
+    <button class="close-button" (click)="close()">✖</button>
+  </div>
+  <div class="info-details">
+
+    <!-- ID info box -->
+    <div class="info-label-container">
+      <div class="info-label id-label" (click)="copyToClipboard(objectId, 'ID')">
+        <div class="label-badge">ID</div>
+        <span class="label-text">{{ objectId }}</span>
+        <span class="copy-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- Warehouse info box -->
+    <div class="info-label-container" *ngIf="warehouse">
+      <div class="info-label warehouse-label" (click)="copyToClipboard(warehouse, 'Warehouse')">
+        <div class="label-badge">Warehouse</div>
+        <span class="label-text">{{ warehouse }}</span>
+        <span class="copy-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- Schema info box -->
+    <div class="info-label-container" *ngIf="schema">
+      <div class="info-label schema-label" (click)="copyToClipboard(schema, 'Schema')">
+        <div class="label-badge">Schema</div>
+        <span class="label-text">{{ schema }}</span>
+        <span class="copy-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+
+    <!-- Object info box -->
+    <div class="info-label-container" *ngIf="object">
+      <div class="info-label object-label" (click)="copyToClipboard(object, 'Object')">
+        <div class="label-badge">Object</div>
+        <span class="label-text">{{ object }}</span>
+        <span class="copy-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+    
+    <!-- Toast notification -->
+    <div class="toast" *ngIf="showToast">
+      {{ toastMessage }}
+    </div>
+  </div>
+  <ng-container *ngIf="columns && columns.length > 0">
+    <h4>Columns</h4>
+    <input type="text" placeholder="Search columns..." [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange($event)" class="search-input"/>
+    <div class="columns-list">
+      <ul>
+        <li *ngFor="let column of filteredColumnsCache" 
+            (click)="onColumnClick(column)"
+            [class.highlight]="column.column_id === highlightedColumnId">
+          <span class="column-name">{{ column.name }}</span>
+          <div class="column-type-wrapper">
+            <span class="column-type">{{ column.type }}</span>
+            <span class="type-indicator" 
+                  [ngClass]="{
+                    'blue-indicator': column.is_type_guessed && column.is_type_updated,
+                    'green-indicator': !column.is_type_guessed,
+                    'red-indicator': column.is_type_guessed && !column.is_type_updated
+                  }">
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,49 @@
+<div class="search-wrapper" [class.has-selection]="hasSelection">
+  <div class="search-container">
+    <div class="search-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </div>
+    <input 
+      type="text" 
+      [value]="searchTerm" 
+      [placeholder]="hasSelection ? '' : 'Search by warehouse, schema, or object...'" 
+      (input)="onSearch($event)" 
+      (keydown)="onKeyDown($event)"
+      (keyup.enter)="!searchResults[selectedIndex] && searchResults.length > 0 && selectResult(searchResults[0])"
+    />
+    <span class="clear-icon" *ngIf="searchTerm" (click)="clearSearch()">&times;</span>
+  </div>
+  
+  <div class="results-container" *ngIf="searchResults.length > 0">
+    <div 
+      class="result-item" 
+      [class.selected]="isSelected(i)"
+      *ngFor="let result of searchResults; let i = index" 
+      (click)="selectResult(result)"
+    >
+      <div class="result-header">
+        <span class="name" [innerHTML]="highlight(result.object, searchTerm)"></span>
+        <span class="type-badge" *ngIf="result.type">{{result.type}}</span>
+      </div>
+      
+      <div class="result-path">
+        <span class="path-segment warehouse" *ngIf="result.warehouse" [innerHTML]="highlight(result.warehouse, searchTerm)"></span>
+        <span class="path-separator" *ngIf="result.warehouse">.</span>
+        <span class="path-segment schema" *ngIf="result.schema" [innerHTML]="highlight(result.schema, searchTerm)"></span>
+        <span class="path-separator" *ngIf="result.schema">.</span>
+        <span class="path-segment name" [innerHTML]="highlight(result.object, searchTerm)"></span>
+      </div>
+      
+      <div class="tags" *ngIf="result.tags && result.tags.length > 0">
+        <span 
+          class="tag" 
+          *ngFor="let tag of result.tags" 
+          [innerHTML]="highlight(tag, searchTerm)"
+        ></span>
+      </div>
+    </div>
+  </div>
+</div>
