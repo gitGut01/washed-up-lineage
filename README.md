@@ -1,5 +1,6 @@
-# WashedUp Lineage
+![WashedUp Lineage Logo](resources/logo.png)
 
+# WashedUp Lineage
 **A half-decent, LLM-powered cartographer that maps your data warehouse mess—tracking both upstream and downstream dependencies.**
 
 ---
