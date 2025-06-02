@@ -19,11 +19,28 @@ WashedUp Lineage is a tool designed to help you understand and visualize the com
 - Uses **Neo4j graph database** to store the lineage data that can be queried
 - Provides a frontend to **visualize data lineage maps** for easier understanding and debugging
 
+## Frontend 
+### View Dependencies
+Select a datamodel to view its upstream and downstream dependencies.
+![Select Datamodel](resources/zoom_lineage.gif)
+
+### Show Datamodel Lineage
+Isolate the lineage to only display the datamodels upstream and downstream dependencies.
+![Show Datamodel Lineage](resources/datamodel_lineage.gif)
+
+### Search
+Search for a datamodel by name.
+![Search Datamodel](resources/search.gif)
+
+### Show Column Lineage
+Select a column to view the columns upstream and downstream dependencies and transformations.
+![Show Column Lineage](resources/column_lineage.gif)
+
 ---
 
 ## Why “WashedUp Lineage”?
 
-Data warehouses often become messy, complex, and hard to navigate — basically, “washed up.” This tool aims to be a **half-decent**, practical way to bring some clarity and order by mapping out all those tangled dependencies with the help of modern AI.
+Data warehouses often become messy, complex, and hard to navigate — basically, “washed up.” This tool aims to be a **half-decent**, practical way to bring some clarity and order by mapping out all those tangled dependencies with the help of AI.
 
 ---
 
