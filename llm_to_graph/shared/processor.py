@@ -11,6 +11,7 @@ import datetime
 from typing import Callable, Dict, List, Tuple, Any, Optional
 from datetime import timedelta
 
+from shared.token_estimation import calculate_token_costs
 from shared.extraction import DEFAULT_EXTRACTION_DIR
 
 def setup_extraction_runs_path(save_extraction_responses: bool, use_already_extracted: bool, extraction_runs_path: Optional[str] = None) -> Optional[str]:
@@ -61,7 +62,7 @@ def process_sql_files(
     Returns:
         Tuple of (failed_scripts, processing_stats)
     """
-        
+     
     # Set up extraction runs path
     extraction_runs_path = setup_extraction_runs_path(
         save_extraction_responses=save_extraction_responses and not use_already_extracted,  # Don't save if we're loading
@@ -87,7 +88,11 @@ def process_sql_files(
         "total_files": total_files,
         "success_count": 0,
         "failed_count": 0,
-        "start_time": total_start_time
+        "start_time": total_start_time,
+        "input_token_count": 0,
+        "input_cost": 0,
+        "output_token_count": 0,
+        "output_cost": 0,
     }
     
     for count, file_path in enumerate(sql_files, 1):
@@ -111,7 +116,7 @@ def process_sql_files(
                     "save_path": extraction_runs_path,
                     "sql_file_path": file_path
                 })
-            
+
             # Call the extraction function with the SQL script and any additional args
             extracted_data, error_message, debug_info = extraction_function(sql_script, do_simple_extract, **extraction_kwargs)
             
@@ -149,6 +154,21 @@ def process_sql_files(
                             print("\n🔍 Agent's strategy:")
                             print(f"   {strategy_match.group(1).strip()}")
                     print("\n")
+
+            # Calculate token costs
+            input_token_count, input_cost, _ = calculate_token_costs(sql_script)
+            output_token_count, _, output_cost = calculate_token_costs(extracted_data.json())
+
+            print(
+                f"Input/Output token count: {input_token_count}/{output_token_count} "
+                f"(cost ${input_cost:.6f}/${output_cost:.6f})"
+            )
+            
+            processing_stats["input_token_count"] += input_token_count
+            processing_stats["input_cost"] += input_cost
+            processing_stats["output_token_count"] += output_token_count
+            processing_stats["output_cost"] += output_cost
+            
     
     # Report summary with timing statistics
     total_time = time.time() - processing_stats["start_time"]
