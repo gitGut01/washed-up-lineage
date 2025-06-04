@@ -58,6 +58,11 @@ def proccess_by_path(
         overall_stats["total_files"] += processing_stats["total_files"]
         overall_stats["success_count"] += processing_stats["success_count"]
         overall_stats["failed_count"] += processing_stats["failed_count"]
+
+        overall_stats["input_token_count"] += processing_stats["input_token_count"]
+        overall_stats["input_cost"] += processing_stats["input_cost"]
+        overall_stats["output_token_count"] += processing_stats["output_token_count"]
+        overall_stats["output_cost"] += processing_stats["output_cost"]
         
     return all_failed_scripts
 
@@ -76,7 +81,11 @@ def main():
     overall_stats = {
         "total_files": 0,
         "success_count": 0,
-        "failed_count": 0
+        "failed_count": 0,
+        "input_token_count": 0,
+        "input_cost": 0,
+        "output_token_count": 0,
+        "output_cost": 0,
     }
     
     # Set up environment

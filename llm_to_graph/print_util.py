@@ -23,9 +23,15 @@ def print_summary(overall_stats, overall_execution_time):
     if overall_stats['total_files'] > 0:
         success_percentage = overall_stats['success_count']/overall_stats['total_files']*100
         failed_percentage = overall_stats['failed_count']/overall_stats['total_files']*100
-        
+
     print(f"Successfully processed: {overall_stats['success_count']} ({success_percentage:.1f}%)")
     print(f"Failed: {overall_stats['failed_count']} ({failed_percentage:.1f}%)")
+    
+    print(
+        f"Input/Output token count: {overall_stats['input_token_count']}/{overall_stats['output_token_count']} "
+        f"(cost ${overall_stats['input_cost']:.3f}/${overall_stats['output_cost']:.3f})"
+    )
+
     print(f"Total execution time: {overall_time_str}")
     print("=" * AMOUNT_OF_CHARACTERS)
 
