@@ -2,8 +2,7 @@ import { Component, OnInit, ViewEncapsulation, NgZone, ChangeDetectionStrategy, 
 import cytoscape from 'cytoscape';
 import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CytoscapeService } from '../../services/cytoscape.service'; 
-import { LineageHighlightService } from '../../services/lineage-highlight.service';
+import { CytoscapeService } from '../../services/cytoscape.service';
 
 const LARGE_GRAPH_THRESHOLD = 200000;
 
@@ -29,7 +28,6 @@ export class GlobalLineageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private cytoscapeService: CytoscapeService,
-    private lineageHighlightService: LineageHighlightService,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef
   ) {}
@@ -37,11 +35,6 @@ export class GlobalLineageComponent implements OnInit {
   ngOnInit() {    
     this.route.queryParams.subscribe(params => {
       const objectId = params['object_id'];
-      const show_info = params['show_info'];
-      
-      if (show_info==false || show_info==undefined) {
-        this.lineageHighlightService.resetEdges(this.cy);
-      }
       
       const path = '/global-lineage';
       
@@ -68,7 +61,6 @@ export class GlobalLineageComponent implements OnInit {
           });
         }
         this.processAndRenderElements(response, path);
-        if (objectId) this.lineageHighlightService.highlightObjectEdgeLineage(objectId, this.cy);
       });
     });
   }
@@ -91,8 +83,8 @@ export class GlobalLineageComponent implements OnInit {
   renderGraph(elements: any[], path: string) {
     let cy: cytoscape.Core;
 
-    // Always use standard node styling regardless of graph size
-    cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, true);
+    // Always use standard node styling and basic edge styling regardless of graph size
+    cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, false);
     this.cytoscapeService.standardNodeStyling(cy);
     
     // restore zoom and pan if we have previous state, otherwise center the graph
@@ -129,8 +121,7 @@ export class GlobalLineageComponent implements OnInit {
       this.cytoscapeService.selectAndCenter(cy, objectId);
       // Set query params
       const queryParams: any = {
-        object_id: objectId,
-        show_info: true
+        object_id: objectId
       };
       this.router.navigate([path], { queryParams });
     });
