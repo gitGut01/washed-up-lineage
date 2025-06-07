@@ -80,7 +80,7 @@ export class CytoscapeService {
     {
       selector: 'node:selected',
       style: {
-        'border-width': '5px',
+        'border-width': '10px',
         'border-color': 'grey',
       },
     }]
@@ -93,8 +93,10 @@ export class CytoscapeService {
       {
         selector: 'edge',
         style: {
+          'target-arrow-color': 'black',
           'target-arrow-shape': 'triangle',
-          "curve-style": "bezier"
+          "curve-style": "bezier",
+          "arrow-scale": 2 
         }
       }
     ]
