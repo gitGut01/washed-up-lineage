@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import cytoscape from 'cytoscape';
-import { adjustLabelSize } from '../../utils/cytoscape-utils';
 import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CytoscapeService } from '../../services/cytoscape.service'; 
 import { LineageHighlightService } from '../../services/lineage-highlight.service';
-import { defineNodeHtmlNode } from '../datamodel-lineage/html-nodes';
 
 const LARGE_GRAPH_THRESHOLD = 200000;
 
@@ -93,17 +91,9 @@ export class GlobalLineageComponent implements OnInit {
   renderGraph(elements: any[], path: string) {
     let cy: cytoscape.Core;
 
-    if (this.isLargeGraph) {
-      cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, false);
-      this.cytoscapeService.standardNodeStyling(cy);
-    } else {
-      cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, true);
-      defineNodeHtmlNode(cy);
-      setTimeout(() => {
-        adjustLabelSize(cy);
-      }, 0);
-      this.cytoscapeService.htmlNodeStyling(cy);
-    }
+    // Always use standard node styling regardless of graph size
+    cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, true);
+    this.cytoscapeService.standardNodeStyling(cy);
     
     // restore zoom and pan if we have previous state, otherwise center the graph
     if (this.graphState.zoom !== 1 || this.graphState.pan.x !== 0 || this.graphState.pan.y !== 0) {
