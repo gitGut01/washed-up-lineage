@@ -7,8 +7,6 @@ import { CytoscapeService } from '../../services/cytoscape.service';
 import { LineageHighlightService } from '../../services/lineage-highlight.service';
 import { defineNodeHtmlNode } from './html-nodes';
 
-const LARGE_GRAPH_THRESHOLD = 200000;
-
 @Component({
   selector: 'app-datamodel-lineage',
   templateUrl: './datamodel-lineage.component.html',
@@ -21,19 +19,13 @@ const LARGE_GRAPH_THRESHOLD = 200000;
 export class DatamodelLineageComponent implements OnInit {
   private cy: cytoscape.Core | null = null;
   private graphState = { zoom: 1, pan: { x: 0, y: 0 } };
-  
-  // Performance optimization flags
-  nodeCount = 0;
-  isLargeGraph = false;
 
   constructor(
     private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute,
     private cytoscapeService: CytoscapeService,
-    private lineageHighlightService: LineageHighlightService,
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
+    private lineageHighlightService: LineageHighlightService
   ) {}
 
   ngOnInit() {    
@@ -42,7 +34,6 @@ export class DatamodelLineageComponent implements OnInit {
       const path = '/datamodel-lineage';
       
       this.destroyCurrentCy();
-      this.cdr.markForCheck();
 
       if (!objectId) {
         // If no object is specified, navigate to global lineage view
@@ -52,20 +43,10 @@ export class DatamodelLineageComponent implements OnInit {
       
       // Load object lineage - for data models and procedures
       this.dataService.getObjectLineage(objectId).subscribe(response => {
-        this.processAndRenderElements(response, path);
+        const elements = this.dataService.mapElements(response);
+        this.renderGraph(elements, path);
         this.lineageHighlightService.highlightObjectEdgeLineage(objectId, this.cy);
       });
-    });
-  }
-  
-  private processAndRenderElements(response: any, path: string) {
-    // Process data outside Angular zone for better performance
-    this.ngZone.runOutsideAngular(() => {
-      // Chunk processing large datasets
-      const elements = this.dataService.mapElements(response);
-
-      this.nodeCount = elements.filter((el: any) => el.group === 'nodes').length;
-      this.renderGraph(elements, path);
     });
   }
 
@@ -78,32 +59,19 @@ export class DatamodelLineageComponent implements OnInit {
       adjustLabelSize(cy);
     }, 0);
     this.cytoscapeService.htmlNodeStyling(cy);
-
     
     // restore zoom and pan if we have previous state, otherwise center the graph
     if (this.graphState.zoom !== 1 || this.graphState.pan.x !== 0 || this.graphState.pan.y !== 0) {
       cy.zoom(this.graphState.zoom);
       cy.pan(this.graphState.pan);
     } else {
-      // Center the graph on the middle of the network after a small delay to ensure rendering is complete
-      setTimeout(() => {
-        try {
-          // First fit all elements to the viewport
-          cy.fit();
-          // Then center the viewport on the middle of the graph
-          cy.center();
-        } catch (e) {
-          console.warn('Error centering graph:', e);
-        }
-      }, 100);
+      cy.fit();
+      cy.center();
     }
     
     this.cy = cy;
   
     this.setUpCytoscapeInstance(cy, path);
-    
-    // Hide loading indicator
-    this.ngZone.run(() => this.cdr.markForCheck());
   }
   
   setUpCytoscapeInstance(cy: cytoscape.Core, path: string) {
