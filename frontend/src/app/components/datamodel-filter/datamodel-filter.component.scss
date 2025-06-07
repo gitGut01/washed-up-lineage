@@ -72,7 +72,7 @@
 
 // Add filter button
 .add-filter {
-  background: none;
+  background-color: rgba(248, 249, 250, 0.7);
   border: 2px dashed #e2e8f0;
   color: #4a5568;
   border-radius: 20px;
@@ -80,6 +80,7 @@
   font-size: 0.9em;
   cursor: pointer;
   transition: all 0.2s ease;
+  backdrop-filter: blur(2px);
   
   &:hover {
     border-color: #3182ce;

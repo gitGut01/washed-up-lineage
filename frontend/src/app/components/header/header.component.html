@@ -7,9 +7,10 @@
       </a>
     </ng-container>
   </div>
+</div>
 
-  <div class="search-filter-container">
-    <app-datamodel-search class="search" *ngIf="showSearch"></app-datamodel-search>
-    <app-datamodel-filter class="filter" *ngIf="showSearch"></app-datamodel-filter>
-  </div>
+<!-- Floating search and filter container -->
+<div class="floating-search-filter-container" *ngIf="showSearch">
+  <app-datamodel-search class="search"></app-datamodel-search>
+  <app-datamodel-filter class="filter"></app-datamodel-filter>
 </div>
