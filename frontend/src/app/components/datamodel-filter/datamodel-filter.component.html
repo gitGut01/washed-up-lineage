@@ -11,7 +11,7 @@
         <button class="remove-filter" (click)="$event.stopPropagation(); removeFilter(filter)">&times;</button>
         
         <!-- Dropdown for filter options -->
-        <div class="filter-dropdown" *ngIf="filter.isOpen">
+        <div class="filter-dropdown" *ngIf="filter.isOpen" (click)="$event.stopPropagation()">
           <div class="filter-search">
             <div class="search-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -27,45 +27,46 @@
           </div>
           
           <div class="filter-options">
-            <div class="option select-all" (click)="toggleSelectAll(filter)">
+            <div class="option select-all">
               <input 
                 type="checkbox" 
                 [checked]="isAllSelected(filter)" 
-                (click)="$event.stopPropagation();"
+                (change)="toggleSelectAll(filter)"
               />
-              <span>Select All</span>
+              <span (click)="toggleSelectAll(filter)">Select All</span>
             </div>
             
             <div 
               class="option" 
               *ngFor="let option of getFilteredOptions(filter)" 
-              (click)="toggleOption(filter, option)"
             >
               <input 
                 type="checkbox" 
                 [checked]="isOptionSelected(filter, option)" 
-                (click)="$event.stopPropagation();"
+                (change)="toggleOption(filter, option)"
               />
-              <span>{{ option }}</span>
+              <span (click)="toggleOption(filter, option)">{{ option }}</span>
             </div>
           </div>
         </div>
       </div>
     </ng-container>
     
-    <!-- Add filter button -->
-    <button class="add-filter" (click)="toggleFilterOptions()">
-      + Add Filter
-    </button>
-    
-    <!-- Filter type selection dropdown -->
-    <div class="filter-type-dropdown" *ngIf="showFilterOptions">
-      <div 
-        class="filter-type-option" 
-        *ngFor="let filterType of availableFilterTypes"
-        (click)="addFilter(filterType.type)"
-      >
-        {{ filterType.label }} Filter
+    <!-- Add filter button with dropdown -->
+    <div class="filter-button-container">
+      <button class="add-filter" (click)="toggleFilterOptions($event)">
+        + Add Filter
+      </button>
+      
+      <!-- Filter type selection dropdown -->
+      <div class="filter-type-dropdown" *ngIf="showFilterOptions" (click)="$event.stopPropagation()">
+        <div 
+          class="filter-type-option" 
+          *ngFor="let filterType of availableFilterTypes"
+          (click)="addFilter(filterType.type)"
+        >
+          {{ filterType.label }} Filter
+        </div>
       </div>
     </div>
   </div>

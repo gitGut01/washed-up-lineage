@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../services/data.service';
@@ -26,6 +26,7 @@ export class DatamodelFilterComponent implements OnInit {
   filters: Filter[] = [];
   activeFilters: Filter[] = [];
   showFilterOptions: boolean = false;
+  filterDropdownPosition: { left: number; top: number } | null = null;
   availableFilterTypes: { type: FilterType, label: string }[] = [
     { type: 'id', label: 'ID' },
     { type: 'schema', label: 'Schema' },
@@ -33,7 +34,12 @@ export class DatamodelFilterComponent implements OnInit {
     { type: 'object', label: 'Object' }
   ];
 
-  constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private dataService: DataService, 
+    private router: Router, 
+    private route: ActivatedRoute,
+    private elementRef: ElementRef
+  ) {}
 
   ngOnInit() {
     // Load existing filter values from query params if any
@@ -103,7 +109,21 @@ export class DatamodelFilterComponent implements OnInit {
     });
   }
 
-  toggleFilterOptions() {
+  toggleFilterOptions(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      
+      // Get the position of the element that was clicked
+      const target = event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+      
+      // Calculate position for the dropdown
+      this.filterDropdownPosition = {
+        left: rect.left,
+        top: rect.bottom + window.scrollY
+      };
+    }
+    
     this.showFilterOptions = !this.showFilterOptions;
     // Close any open filter dropdown when showing/hiding filter type selection
     this.filters.forEach(filter => filter.isOpen = false);
@@ -146,10 +166,18 @@ export class DatamodelFilterComponent implements OnInit {
   }
 
   toggleSelectAll(filter: Filter) {
-    if (filter.selected.length === filter.available.length) {
-      filter.selected = [];
+    const filteredOptions = this.getFilteredOptions(filter);
+    
+    // If all filtered options are selected, deselect them all
+    if (filteredOptions.every(option => filter.selected.includes(option))) {
+      filter.selected = filter.selected.filter(item => !filteredOptions.includes(item));
     } else {
-      filter.selected = [...filter.available];
+      // Select all filtered options that aren't already selected
+      filteredOptions.forEach(option => {
+        if (!filter.selected.includes(option)) {
+          filter.selected.push(option);
+        }
+      });
     }
     this.updateFilters();
   }
@@ -159,7 +187,8 @@ export class DatamodelFilterComponent implements OnInit {
   }
 
   isAllSelected(filter: Filter): boolean {
-    return filter.selected.length === filter.available.length;
+    const filteredOptions = this.getFilteredOptions(filter);
+    return filteredOptions.length > 0 && filteredOptions.every(option => filter.selected.includes(option));
   }
 
   updateFilters() {
@@ -186,5 +215,43 @@ export class DatamodelFilterComponent implements OnInit {
     return filter.available.filter(option => 
       option.toLowerCase().includes(filter.searchTerm.toLowerCase())
     );
+  }
+  
+  // Close dropdowns only when clicking outside the component or on non-dropdown elements
+  @HostListener('document:click', ['$event'])
+  handleDocumentClick(event: MouseEvent) {
+    // Get the target element
+    const target = event.target as HTMLElement;
+    
+    // Check if click occurred inside filter dropdown
+    const clickedInFilterDropdown = this.elementContainsClass(target, 'filter-dropdown');
+    
+    // Check if click occurred inside filter type dropdown
+    const clickedInFilterTypeDropdown = this.elementContainsClass(target, 'filter-type-dropdown');
+    
+    // Check if click was on a filter pill
+    const clickedOnFilterPill = this.elementContainsClass(target, 'filter-pill');
+    
+    // Check if click was on the add filter button
+    const clickedOnAddFilter = this.elementContainsClass(target, 'add-filter');
+    
+    // Only close dropdowns if click was outside of any dropdown, pill or add filter button
+    if (!clickedInFilterDropdown && !clickedInFilterTypeDropdown && !clickedOnFilterPill && !clickedOnAddFilter) {
+      // Close all open dropdowns
+      this.filters.forEach(filter => filter.isOpen = false);
+      this.showFilterOptions = false;
+    }
+  }
+  
+  // Helper method to check if element or any parent has a specific class
+  private elementContainsClass(element: HTMLElement | null, className: string): boolean {
+    let current = element;
+    while (current) {
+      if (current.classList && current.classList.contains(className)) {
+        return true;
+      }
+      current = current.parentElement;
+    }
+    return false;
   }
 }

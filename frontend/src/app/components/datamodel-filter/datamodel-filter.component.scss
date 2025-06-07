@@ -10,6 +10,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  position: relative;
 }
 
 // Individual filter pill style
@@ -63,6 +64,12 @@
   }
 }
 
+// Filter button container for proper dropdown positioning
+.filter-button-container {
+  position: relative;
+  display: inline-block;
+}
+
 // Add filter button
 .add-filter {
   background: none;
@@ -83,20 +90,45 @@
 // Dropdown for filter type selection
 .filter-type-dropdown {
   position: absolute;
-  top: 40px;
+  top: 100%;
   left: 0;
+  right: auto;
+  min-width: 180px;
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
-  min-width: 160px;
-  padding: 5px 0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-top: 10px;
+  z-index: 1001;
+  max-height: 350px;
+  overflow-y: auto;
+  color: #333;
+  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 0 8px 8px 0;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #a0aec0;
+    }
+  }
   
   .filter-type-option {
-    padding: 8px 16px;
+    padding: 10px 16px;
     cursor: pointer;
     transition: background 0.2s ease;
+    color: #333;
+    display: flex;
+    align-items: center;
     
     &:hover {
       background-color: #f0f7ff;
@@ -110,7 +142,9 @@
   top: 100%;
   left: 0;
   right: auto;
-  min-width: 250px;
+  min-width: 280px;
+  width: max-content;
+  max-width: 400px;
   background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -119,6 +153,8 @@
   z-index: 1001;
   max-height: 350px;
   overflow-y: auto;
+  overflow-x: hidden;
+  color: #333;
   
   &::-webkit-scrollbar {
     width: 8px;
@@ -171,6 +207,7 @@
 .filter-options {
   max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
   
   .option {
     display: flex;
@@ -178,6 +215,7 @@
     padding: 8px 16px;
     cursor: pointer;
     transition: background 0.2s ease;
+    color: #333;
     
     &:hover {
       background-color: #f0f7ff;
@@ -188,6 +226,10 @@
       border-bottom: 1px solid #e2e8f0;
       padding-top: 10px;
       padding-bottom: 10px;
+    }
+    
+    span {
+      color: #333;
     }
     
     input[type="checkbox"] {
