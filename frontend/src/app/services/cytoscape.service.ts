@@ -221,7 +221,7 @@ export class CytoscapeService {
 
   deselectAllNodes(cy: cytoscape.Core) {
     cy.batch(() => {
-      cy.nodes().data('isSelected', false);
+      cy.$(':selected').unselect(); // Use Cytoscape's unselect method on currently selected elements
     });
   }
 
@@ -234,10 +234,10 @@ export class CytoscapeService {
   }
 
   selectAndCenter(cy: cytoscape.Core, id: string, duration: number = 100) {
-    this.deselectAllNodes(cy);
+    this.deselectAllNodes(cy); // This will now properly unselect previous nodes
     const node = cy.nodes().filter(`[id = "${id}"]`);
-    if (node.length > 0) {
-      node.data('isSelected', true);
+    if (node.length > 0 && !node.selected()) { // Check if node exists and is not already selected
+      node.select(); // Use Cytoscape's select method
       try {
         const pos = node.position();
         const currZoom = cy.zoom();
