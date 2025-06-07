@@ -5,20 +5,20 @@ import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CytoscapeService } from '../../services/cytoscape.service'; 
 import { LineageHighlightService } from '../../services/lineage-highlight.service';
-import { defineNodeHtmlNode } from './html-nodes';
+import { defineNodeHtmlNode } from '../datamodel-lineage/html-nodes';
 
 const LARGE_GRAPH_THRESHOLD = 200000;
 
 @Component({
-  selector: 'app-datamodel-lineage',
-  templateUrl: './datamodel-lineage.component.html',
-  styleUrls: ['./datamodel-lineage.component.scss'],
+  selector: 'app-global-lineage',
+  templateUrl: './global-lineage.component.html',
+  styleUrls: ['./global-lineage.component.scss'],
   standalone: true,
   imports: [],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DatamodelLineageComponent implements OnInit {
+export class GlobalLineageComponent implements OnInit {
   private cy: cytoscape.Core | null = null;
   private graphState = { zoom: 1, pan: { x: 0, y: 0 } };
   
@@ -44,7 +44,8 @@ export class DatamodelLineageComponent implements OnInit {
       if (show_info==false || show_info==undefined) {
         this.lineageHighlightService.resetEdges(this.cy);
       }
-      const path = '/datamodel-lineage';
+      
+      const path = '/global-lineage';
       
       // destroy previous instance to save state before reload
       if (this.cy) this.destroyCurrentCy();
@@ -52,17 +53,24 @@ export class DatamodelLineageComponent implements OnInit {
       // Show loading state
       this.cdr.markForCheck();
       
-      // Ensure we have an object ID
-      if (!objectId) {
-        // If no object is specified, navigate to global lineage view
-        this.router.navigate(['/global-lineage']);
-        return;
-      }
-      
-      // Load object lineage - for data models and procedures
-      this.dataService.getObjectLineage(objectId).subscribe(response => {
+      // Default view - load all objects (data models and stored procedures)
+      this.dataService.getAllObjects().subscribe(response => {
+        // Process elements to ensure consistency
+        if (response && response.elements) {
+          response.elements = response.elements.map((element: any) => {
+            if (element.group === 'nodes') {
+              // Ensure all required properties exist
+              element.data = {
+                ...element.data,
+                id: element.data.name || element.data.id, // Use name as id if not present
+                isSelected: false
+              };
+            }
+            return element;
+          });
+        }
         this.processAndRenderElements(response, path);
-        this.lineageHighlightService.highlightObjectEdgeLineage(objectId, this.cy);
+        if (objectId) this.lineageHighlightService.highlightObjectEdgeLineage(objectId, this.cy);
       });
     });
   }
@@ -83,13 +91,12 @@ export class DatamodelLineageComponent implements OnInit {
   }
 
   renderGraph(elements: any[], path: string) {
-    
     let cy: cytoscape.Core;
 
     if (this.isLargeGraph) {
       cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, false);
       this.cytoscapeService.standardNodeStyling(cy);
-    }else{
+    } else {
       cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, true);
       defineNodeHtmlNode(cy);
       setTimeout(() => {
@@ -97,7 +104,6 @@ export class DatamodelLineageComponent implements OnInit {
       }, 0);
       this.cytoscapeService.htmlNodeStyling(cy);
     }
-
     
     // restore zoom and pan if we have previous state, otherwise center the graph
     if (this.graphState.zoom !== 1 || this.graphState.pan.x !== 0 || this.graphState.pan.y !== 0) {
@@ -131,6 +137,7 @@ export class DatamodelLineageComponent implements OnInit {
       const objectId = node.data().id;
 
       this.cytoscapeService.selectAndCenter(cy, objectId);
+      // Set query params
       const queryParams: any = {
         object_id: objectId,
         show_info: true
@@ -140,7 +147,7 @@ export class DatamodelLineageComponent implements OnInit {
 
     cy.on('tap', (event) => {
       if (event.target === cy) {
-        this.router.navigate(['/global-lineage']);
+        this.router.navigate([path]);
       }
     });
     
@@ -152,11 +159,11 @@ export class DatamodelLineageComponent implements OnInit {
       const node = cy.nodes().filter(`[id = "${initId}"]`);
       if (node.length > 0) {
         node.data('isSelected', true);
-        this.cytoscapeService.selectAndCenter(cy, initId);
+        // instant center for default view
+        try { cy.center(node); } catch { /*no-op*/ }
       }
     }
   }
-  
 
   destroyCurrentCy() {
     if (this.cy) {

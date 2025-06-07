@@ -34,8 +34,12 @@ export class DatamodelInfoPanelComponent implements OnInit {
   highlightedColumnId: string | null = null;
   searchQuery: string = '';
   closePanelToRoute: string = '';
-  lineageToggle: boolean = false; // toggle for lineage view
   panelWidth: number = 300;
+  
+  // Computed property to determine if we're in the object lineage view
+  get lineageToggle(): boolean {
+    return this.router.url.split('?')[0] === '/datamodel-lineage';
+  }
   
   private resizing = false;
   private startX = 0;
@@ -53,7 +57,6 @@ export class DatamodelInfoPanelComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       const objectId = params['object_id'];
       const showInfo = params['show_info'];
-      this.lineageToggle = !!params['show_lineage'];
       this.highlightedColumnId = params['column_id'] || null;
   
       if (objectId && showInfo) {
@@ -144,24 +147,25 @@ export class DatamodelInfoPanelComponent implements OnInit {
   }
 
   /**
-   * Navigate to datamodel lineage view for current datamodel
+   * Toggle between global and object lineage views
    */
   showLineage() {
-    // Toggle lineage view state
-    this.lineageToggle = !this.lineageToggle;
+    // Check current route to determine toggle destination
+    const currentRoute = this.router.url.split('?')[0];
     
-    // Build query params based on toggle state
+    // Build query params
     const queryParams: any = {
       object_id: this.objectId,
       show_info: true
     };
     
-    // Only add show_lineage if it's turned on
-    if (this.lineageToggle) {
-      queryParams.show_lineage = true;
+    if (currentRoute === '/datamodel-lineage') {
+      // We're in object lineage view, go back to global view
+      this.router.navigate(['/global-lineage'], { queryParams });
+    } else {
+      // We're in global or another view, go to object lineage view
+      this.router.navigate(['/datamodel-lineage'], { queryParams });
     }
-    
-    this.router.navigate(['/datamodel-lineage'], { queryParams });
   }
 
   copyToClipboard(text: string, label: string = '') {
@@ -181,15 +185,31 @@ export class DatamodelInfoPanelComponent implements OnInit {
   }
 
   /**
-   * Toggle between info and lineage views
+   * Toggle between global and object-specific lineage views
    */
   toggleLineage() {
     if (!this.objectId) return;
-    // flip the toggle state
-    this.lineageToggle = !this.lineageToggle;
-    const params: any = { object_id: this.objectId, show_info: true };
-    if (this.lineageToggle) params['show_lineage'] = true;
-    this.router.navigate(['/datamodel-lineage'], { queryParams: params });
+    
+    // Check current route to determine toggle destination
+    const currentRoute = this.router.url.split('?')[0];
+    
+    if (currentRoute === '/datamodel-lineage') {
+      // We're in object lineage view, go to global view
+      this.router.navigate(['/global-lineage'], { 
+        queryParams: { 
+          object_id: this.objectId, 
+          show_info: true 
+        } 
+      });
+    } else {
+      // We're in another view, go to object lineage view
+      this.router.navigate(['/datamodel-lineage'], { 
+        queryParams: { 
+          object_id: this.objectId, 
+          show_info: true 
+        } 
+      });
+    }
   }
 
   onResizeMouseDown(event: MouseEvent) {

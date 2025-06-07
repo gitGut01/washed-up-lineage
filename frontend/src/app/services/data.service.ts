@@ -205,9 +205,10 @@ export class DataService {
       return [];
     }
     
-    // Check if we need to highlight edges (only when URL doesn't have show_lineage=true)
-    const shouldHighlightEdges = highlightedNodeName && 
-      window.location.search.indexOf('show_lineage=true') === -1;
+    // Check if we need to highlight edges based on current route and node highlighting
+    const currentRoute = window.location.pathname;
+    const isGlobalView = currentRoute.indexOf('/global-lineage') !== -1;
+    const shouldHighlightEdges = highlightedNodeName && isGlobalView;
     
     // Throttle rendering for large datasets
     const elements = response.elements.map((element: any) => {

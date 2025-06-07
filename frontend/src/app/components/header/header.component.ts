@@ -33,15 +33,18 @@ export class HeaderComponent implements OnInit {
 
   updateHeaderText(): void {
     const currentRoute = this.router.url.split('?')[0]; // Remove query params
-    this.showBackArrow = currentRoute !== '/datamodel-lineage';
-    this.showSearch = currentRoute === '/datamodel-lineage';
+    this.showBackArrow = currentRoute !== '/global-lineage';
+    this.showSearch = currentRoute === '/global-lineage' || currentRoute === '/datamodel-lineage';
     
     switch (currentRoute) {
       case '/column-lineage':
         this.headerText = 'Column Lineage';
         break;
       case '/datamodel-lineage':
-        this.headerText = 'Data Model Lineage';
+        this.headerText = 'Object Lineage';
+        break;
+      case '/global-lineage':
+        this.headerText = 'Global Lineage';
         break;
       default:
         this.headerText = 'Default Header';
