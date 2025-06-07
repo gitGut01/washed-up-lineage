@@ -1,4 +1,7 @@
-![WashedUp Lineage Logo](resources/logo.png)
+<div align="center">
+  <img src="resources/logo.png" alt="WashedUp Lineage Logo" width="150"/>
+</div>
+
 
 # WashedUp Lineage
 **A half-decent, LLM-powered cartographer that maps your data warehouse mess—tracking both upstream and downstream dependencies.**
