@@ -134,6 +134,14 @@
       background-color: #f0f7ff;
     }
   }
+  
+  .no-filters-available {
+    padding: 12px 16px;
+    color: #718096;
+    font-size: 0.9em;
+    text-align: center;
+    font-style: italic;
+  }
 }
 
 // Filter options dropdown
@@ -152,8 +160,7 @@
   margin-top: 10px;
   z-index: 1001;
   max-height: 350px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden; // Hide overflow completely, let child element handle scrolling
   color: #333;
   
   &::-webkit-scrollbar {
@@ -178,15 +185,16 @@
 // Filter search box
 .filter-search {
   position: relative;
-  padding: 10px;
+  padding: 10px 10px 10px 10px;
   border-bottom: 1px solid #e2e8f0;
   
   input {
     width: 100%;
-    padding: 8px 10px 8px 32px;
+    padding: 8px 8px 8px 30px;
     font-size: 0.9em;
     border: 1px solid #e2e8f0;
     border-radius: 4px;
+    box-sizing: border-box;
     
     &:focus {
       outline: none;
@@ -197,15 +205,16 @@
   
   .search-icon {
     position: absolute;
-    left: 20px;
+    left: 18px;
     top: 18px;
     color: #a0aec0;
+    z-index: 1;
   }
 }
 
 // Filter options
 .filter-options {
-  max-height: 300px;
+  max-height: 250px; // Reduced to account for search box height
   overflow-y: auto;
   overflow-x: hidden;
   

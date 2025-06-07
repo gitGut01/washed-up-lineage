@@ -28,7 +28,7 @@ export class DatamodelFilterComponent implements OnInit {
   showFilterOptions: boolean = false;
   filterDropdownPosition: { left: number; top: number } | null = null;
   availableFilterTypes: { type: FilterType, label: string }[] = [
-    { type: 'id', label: 'ID' },
+    //{ type: 'id', label: 'ID' },
     { type: 'schema', label: 'Schema' },
     { type: 'warehouse', label: 'Warehouse' },
     { type: 'object', label: 'Object' }
@@ -58,13 +58,13 @@ export class DatamodelFilterComponent implements OnInit {
         .filter((el: any) => el.group === 'nodes' && el.data);
 
       // Extract unique values for each filter type
-      const ids = new Set<string>();
+      //const ids = new Set<string>();
       const schemas = new Set<string>();
       const warehouses = new Set<string>();
       const objects = new Set<string>();
 
       nodes.forEach((node: any) => {
-        if (node.data.id) ids.add(node.data.id);
+        //if (node.data.id) ids.add(node.data.id);
         if (node.data.schema) schemas.add(node.data.schema);
         if (node.data.warehouse) warehouses.add(node.data.warehouse);
         if (node.data.object) objects.add(node.data.object);
@@ -74,9 +74,9 @@ export class DatamodelFilterComponent implements OnInit {
       this.availableFilterTypes.forEach(filterType => {
         let availableValues: string[] = [];
         switch (filterType.type) {
-          case 'id':
-            availableValues = Array.from(ids);
-            break;
+          //case 'id':
+            //availableValues = Array.from(ids);
+            //break;
           case 'schema':
             availableValues = Array.from(schemas);
             break;
@@ -214,6 +214,17 @@ export class DatamodelFilterComponent implements OnInit {
     
     return filter.available.filter(option => 
       option.toLowerCase().includes(filter.searchTerm.toLowerCase())
+    );
+  }
+  
+  // Get filter types that aren't already active
+  getAvailableFilterTypes(): { type: FilterType, label: string }[] {
+    // Get all filter types that are already active
+    const activeTypes = this.activeFilters.map(filter => filter.type);
+    
+    // Return only filter types that aren't already active
+    return this.availableFilterTypes.filter(filterType => 
+      !activeTypes.includes(filterType.type)
     );
   }
   

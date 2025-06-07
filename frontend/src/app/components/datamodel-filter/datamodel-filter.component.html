@@ -62,10 +62,13 @@
       <div class="filter-type-dropdown" *ngIf="showFilterOptions" (click)="$event.stopPropagation()">
         <div 
           class="filter-type-option" 
-          *ngFor="let filterType of availableFilterTypes"
+          *ngFor="let filterType of getAvailableFilterTypes()"
           (click)="addFilter(filterType.type)"
         >
           {{ filterType.label }} Filter
+        </div>
+        <div class="no-filters-available" *ngIf="getAvailableFilterTypes().length === 0">
+          All filters are active
         </div>
       </div>
     </div>
