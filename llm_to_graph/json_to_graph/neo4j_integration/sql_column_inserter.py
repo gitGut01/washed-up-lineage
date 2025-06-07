@@ -1,7 +1,5 @@
-
-from neo4j_integration.base_connector import driver
-from shared.data_models import Column
-from shared.split_warehouse_schema_object import split_warehouse_schema_object, get_id_name
+from data_models import Column
+from json_to_graph.split_warehouse_schema_object import split_warehouse_schema_object, get_id_name
 
 
 def get_transformations(column: Column):

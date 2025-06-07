@@ -47,7 +47,6 @@ The project uses `config.py` for non-sensitive configuration:
 | `WAREHOUSE_DEFAULT_SCHEMA_MAPPING` | Maps warehouse names to their default schemas. This is to know what schema to put `AnotherWarehouse..ObjectName` in. |
 | `DO_RESET_NEO4J_DATABASE` | Whether to reset the Neo4j database before extraction (default: True) |
 | `DO_SIMPLE_EXTRACT` | Enable simpler extraction, if `True`, will ignore columns |
-| `USE_ALREADY_EXTRACTED` | Reuse previous extraction results if available |
 | `DEFAULT_EXTRACTION_DIR` | Directory for storing extraction results |
 | `PATH_EXTRACTION_RUNS` | Subfolder for extraction runs |
 | `DATAMODEL_SQL_PATHTS` | List of paths to SQL files containing table/view definitions |
@@ -63,7 +62,6 @@ WAREHOUSE_DEFAULT_SCHEMA_MAPPING = {
     "Organizer": "yo"
 }
 DO_SIMPLE_EXTRACT = True
-USE_ALREADY_EXTRACTED = True
 DEFAULT_EXTRACTION_DIR = "extraction_runs"
 PATH_EXTRACTION_RUNS = "BURGER_SIMPLE"
 
@@ -96,10 +94,6 @@ This will:
 5. Create relationships between entities in Neo4j
 6. Apply post-processing steps to enhance the graph
 7. Create indexes for efficient querying
-
-### Advanced Usage
-
-You can modify `config.py` to load already extracted jsons. You can always change the jsons and rerun the `USE_ALREADY_EXTRACTED = True` to reload the modifeid jsons.
 
 ## Accessing the Graph
 

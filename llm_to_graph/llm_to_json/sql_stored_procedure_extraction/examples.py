@@ -2,7 +2,7 @@
 This module contains example SQL procedures and expected outputs.
 These are used for demonstrating the correct format in prompts.
 """
-from shared.data_models import StoredProcedure, StoredProcedureSimple, DataModel, Column
+from data_models import StoredProcedure, StoredProcedureSimple
 
 # Example stored procedure for demonstration
 EXAMPLE_SQL = """
@@ -30,36 +30,12 @@ BEGIN
 END;
 """
 
-# Example output for the stored procedure
 EXAMPLE_OUTPUT = StoredProcedure(
     name="finance.UpdateBalances",
-    source_objects=[
-        DataModel(
-            name="finance.Accounts",
-            columns=[
-                Column(name="Balance", type="DECIMAL(10,2)"),  # Used in arithmetic
-                Column(name="AccountID", type="INT"),  # Used in WHERE and SELECT
-            ]
-        )
-    ],
-    target_objects=[
-        DataModel(
-            name="finance.Accounts",
-            columns=[
-                Column(name="Balance", type="DECIMAL(10,2)")  # Being updated
-            ]
-        ),
-        DataModel(
-            name="finance.Transactions",
-            columns=[
-                Column(name="AccountID", type="INT"),
-                Column(name="Amount", type="DECIMAL(10,2)"),
-                Column(name="TransactionType", type="VARCHAR(20)"),
-                Column(name="TransactionDate", type="DATETIME"),
-            ]
-        )
-    ]
+    source_objects=["finance.Accounts"],
+    target_objects=["finance.Accounts", "finance.Transactions"]
 )
+
 
 EXAMPLE_OUTPUT_SIMPLE = StoredProcedureSimple(
     name="finance.UpdateBalances",

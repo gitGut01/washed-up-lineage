@@ -1,12 +1,11 @@
-from neo4j_integration.base_connector import driver
+from json_to_graph.neo4j_integration.base_connector import driver
+from logger import logg_print
 
-
-def add_metadata_to_columns():
+def add_metadata_to_columns(logger):
     """Add warehouse, schema, and object metadata to columns by traversing the HAS_COLUMN relationship in reverse.
     For each column, find the object node that has the column via the HAS_COLUMN relationship
     and add the warehouse, schema, and object properties to the column.
     """
-    print("Adding metadata to columns...")
     
     with driver.session() as session:
         # Get all columns and their parent objects
@@ -38,10 +37,6 @@ def add_metadata_to_columns():
                     "object_type": object_type
                 })
             except Exception as e:
-                print(f"Error adding metadata to column {column_name}: {e}")
+                logg_print(logger, f"❌ Error adding metadata to column {column_name}: {e}")
     
-    print("Finished adding metadata to columns")
-
-
-if __name__ == "__main__":
-    add_metadata_to_columns()
+    logg_print(logger, "☑️ Finished adding metadata to columns")

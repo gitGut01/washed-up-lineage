@@ -2,7 +2,7 @@
 This module contains example SQL data models and expected outputs.
 These are used for demonstrating the correct format in prompts.
 """
-from shared.data_models import DataModel, DataModelSimple, Column, Transformation
+from data_models import DataModel, DataModelSimple, Column, Transformation
 
 # Define examples using the actual models
 EXAMPLE_SQL = """
