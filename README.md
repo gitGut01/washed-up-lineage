@@ -44,7 +44,7 @@ Select a column to view the columns upstream and downstream dependencies and tra
 
 ## Why “WashedUp Lineage”?
 
-Data warehouses often become messy, complex, and hard to navigate — basically, “washed up.” This tool aims to be a **half-decent**, practical way to bring some clarity and order by mapping out all those tangled dependencies with the help of AI.
+Data warehouses often become messy, complex, and hard to navigate — basically, ["washed up"](https://www.urbandictionary.com/define.php?term=washed%20up). This tool aims to be a **half-decent**, practical way to bring some clarity and order by mapping out all those tangled dependencies with the help of AI.
 
 ---
 

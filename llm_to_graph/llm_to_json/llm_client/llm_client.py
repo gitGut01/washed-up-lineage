@@ -5,6 +5,8 @@ from langchain_google_vertexai import ChatVertexAI
 from langchain_ollama.llms import OllamaLLM
 from langchain_openai.llms import OpenAI
 from google.auth.transport.requests import Request
+from dotenv import load_dotenv
+load_dotenv()
 
 warnings.filterwarnings(
     "ignore",
@@ -14,7 +16,7 @@ warnings.filterwarnings(
 # Google Vertex AI Configuration
 GEMINI_TOKEN_PICKLE_PATH='token_new.pickle'
 GEMINI_MODEL='gemini-2.0-flash' #'gemini-1.5-pro-001'
-GEMINI_PROJECT='your-google-project'
+GEMINI_PROJECT=os.getenv("GEMINI_PROJECT")
 
 # Ollama Configuration
 OLLAMA_MODEL='llama3.2:3b-instruct-q4_K_M'
