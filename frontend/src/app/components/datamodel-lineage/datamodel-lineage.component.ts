@@ -39,20 +39,11 @@ export class DatamodelLineageComponent implements OnInit {
   ngOnInit() {    
     this.route.queryParams.subscribe(params => {
       const objectId = params['object_id'];
-      const show_info = params['show_info'];
-      
-      if (show_info==false || show_info==undefined) {
-        this.lineageHighlightService.resetEdges(this.cy);
-      }
       const path = '/datamodel-lineage';
       
-      // destroy previous instance to save state before reload
-      if (this.cy) this.destroyCurrentCy();
-      
-      // Show loading state
+      this.destroyCurrentCy();
       this.cdr.markForCheck();
-      
-      // Ensure we have an object ID
+
       if (!objectId) {
         // If no object is specified, navigate to global lineage view
         this.router.navigate(['/global-lineage']);
@@ -67,9 +58,6 @@ export class DatamodelLineageComponent implements OnInit {
     });
   }
   
-  /**
-   * Process and render graph elements
-   */
   private processAndRenderElements(response: any, path: string) {
     // Process data outside Angular zone for better performance
     this.ngZone.runOutsideAngular(() => {
@@ -133,7 +121,7 @@ export class DatamodelLineageComponent implements OnInit {
 
     cy.on('tap', (event) => {
       if (event.target === cy) {
-        this.router.navigate(['/global-lineage']);
+        this.router.navigate([path], { queryParams: {show_info: null }, queryParamsHandling: 'merge' });
       }
     });
     

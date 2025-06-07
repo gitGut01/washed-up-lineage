@@ -33,7 +33,6 @@ export class DatamodelInfoPanelComponent implements OnInit {
   isOpen = false;
   highlightedColumnId: string | null = null;
   searchQuery: string = '';
-  closePanelToRoute: string = '';
   panelWidth: number = 300;
   
   // Computed property to determine if we're in the object lineage view
@@ -70,10 +69,7 @@ export class DatamodelInfoPanelComponent implements OnInit {
     });
 
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.closePanelToRoute = this.router.url.split('?')[0]; // Remove query params
-    });
+      .pipe(filter(event => event instanceof NavigationEnd));
   }
 
   fetchDatamodelData(objectId: string) {
@@ -143,7 +139,11 @@ export class DatamodelInfoPanelComponent implements OnInit {
 
   close() {
     this.isOpen = false;
-    this.router.navigate([this.closePanelToRoute]);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { show_info: null },
+      queryParamsHandling: 'merge'
+    });
   }
 
   /**
