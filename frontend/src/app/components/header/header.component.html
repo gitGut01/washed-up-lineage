@@ -8,5 +8,8 @@
     </ng-container>
   </div>
 
-  <app-datamodel-search class="search" *ngIf="showSearch"></app-datamodel-search>
+  <div class="search-filter-container">
+    <app-datamodel-search class="search" *ngIf="showSearch"></app-datamodel-search>
+    <app-datamodel-filter class="filter" *ngIf="showSearch"></app-datamodel-filter>
+  </div>
 </div>

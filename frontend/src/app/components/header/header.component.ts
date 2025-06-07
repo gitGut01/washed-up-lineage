@@ -4,12 +4,13 @@ import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DatamodelSearchComponent } from '../datamodel-search/datamodel-search.component';
+import { DatamodelFilterComponent } from '../datamodel-filter/datamodel-filter.component';
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, DatamodelSearchComponent],
+  imports: [CommonModule, RouterModule, DatamodelSearchComponent, DatamodelFilterComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
