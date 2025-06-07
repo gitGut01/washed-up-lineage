@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 
-from shared.data_models import DataModel
-from sql_datamodel_extraction.examples import EXAMPLE_SQL, EXAMPLE_OUTPUT
+from data_models import DataModel
+from llm_to_json.sql_datamodel_extraction.examples import EXAMPLE_SQL, EXAMPLE_OUTPUT
 
 # Define Prompt for SQL Structure Extraction
 prompt = PromptTemplate(

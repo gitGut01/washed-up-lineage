@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 
-from sql_stored_procedure_extraction.examples import EXAMPLE_SQL, EXAMPLE_OUTPUT
-from shared.data_models import StoredProcedure
+from data_models import StoredProcedure
+from llm_to_json.sql_stored_procedure_extraction.examples import EXAMPLE_SQL, EXAMPLE_OUTPUT
 
 # Define the prompt template for stored procedure extraction
 prompt = PromptTemplate(

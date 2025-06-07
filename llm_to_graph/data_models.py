@@ -25,10 +25,12 @@ class DataModelSimple(BaseModel):
 
 class StoredProcedure(BaseModel):
     name: str
-    source_objects: List[DataModel] = []  # Objects the procedure reads from
-    target_objects: List[DataModel] = []  # Objects the procedure writes to
+    type: Literal["stored_procedure"] = "stored_procedure"
+    source_objects: List[str] = []  # Objects the procedure reads from
+    target_objects: List[str] = []  # Objects the procedure writes to
 
 class StoredProcedureSimple(BaseModel):
     name: str
+    type: Literal["stored_procedure"] = "stored_procedure"
     source_objects: List[str] = []
     target_objects: List[str] = []

@@ -1,6 +1,7 @@
-from neo4j_integration.base_connector import driver
+from json_to_graph.neo4j_integration.base_connector import driver
+from logger import logg_print
 
-def classify_column_types():
+def classify_column_types(logger):
     """
     Classifies Column nodes in Neo4j as:
     - Root: columns with no upstream columns (no incoming UPSTREAM_COLUMN relationships)
@@ -58,6 +59,6 @@ def classify_column_types():
             node_type = record["node_type"] if record["node_type"] else "UNCLASSIFIED"
             stats[node_type] = record["count"]
         
-        print(f"Column classification complete:")
+        logg_print(logger, f"☑️ Column classification complete:")
         for node_type, count in stats.items():
-            print(f"  - {node_type}: {count} columns")
+            logg_print(logger, f"  - {node_type}: {count} columns")

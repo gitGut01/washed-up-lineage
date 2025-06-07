@@ -1,6 +1,7 @@
-from neo4j_integration.base_connector import driver
+from json_to_graph.neo4j_integration.base_connector import driver
+from logger import logg_print
 
-def classify_datamodel_types():
+def classify_datamodel_types(logger):
     """
     Classifies DataModel nodes in Neo4j as:
     - Root: nodes with no upstream models (no incoming UPSTREAM_MODEL relationships)
@@ -58,6 +59,6 @@ def classify_datamodel_types():
             node_type = record["node_type"] if record["node_type"] else "UNCLASSIFIED"
             stats[node_type] = record["count"]
         
-        print(f"Node classification complete:")
+        logg_print(logger, f"☑️ Node classification complete:")
         for node_type, count in stats.items():
-            print(f"  - {node_type}: {count} nodes")
+            logg_print(logger, f"  - {node_type}: {count} nodes")

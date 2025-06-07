@@ -1,6 +1,7 @@
-from neo4j_integration.base_connector import driver
+from json_to_graph.neo4j_integration.base_connector import driver
+from logger import logg_print
 
-def propagate_column_types():
+def propagate_column_types(logger):
     visited = set()
     queue = []
 
@@ -73,3 +74,4 @@ def propagate_column_types():
                     except Exception:
                         # If even setting the error flag fails, just continue
                         pass
+    logg_print(logger, "☑️ Propagated column types")

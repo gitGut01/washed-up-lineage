@@ -1,17 +1,13 @@
-from shared.data_models import DataModel, Column
-from shared.split_warehouse_schema_object import split_warehouse_schema_object, get_id_name
-from neo4j_integration.sql_column_inserter import insert_column, insert_downstream_columns
-from neo4j_integration.base_connector import driver
+from data_models import DataModel
+from json_to_graph.split_warehouse_schema_object import split_warehouse_schema_object, get_id_name
+from json_to_graph.neo4j_integration.sql_column_inserter import insert_column, insert_downstream_columns
+from json_to_graph.neo4j_integration.base_connector import driver
 from config import DEFAULT_WAREHOUSE, DO_SIMPLE_EXTRACT
 
-# Import shared Neo4j connection and operations
-DEFAULT_DATAMODEL_TYPE = "UNKNOWN"
-
-
-def insert_datamodel(session, full_object_name:str, datamodel_type:str=DEFAULT_DATAMODEL_TYPE): 
+def insert_datamodel(session, full_object_name:str, datamodel_type:str): 
     datamodel_type = datamodel_type.lower()
     if datamodel_type not in ["table", "view"]:
-        datamodel_type = DEFAULT_DATAMODEL_TYPE
+        print(full_object_name, "yooo")
     
     warehouse, schema, object = split_warehouse_schema_object(full_object_name)
     id_name = get_id_name(warehouse, schema, object)
@@ -79,11 +75,7 @@ def insert_downstream_datamodels(session, datamodel: DataModel):
 def insert_datamodel_into_neo4j(datamodel: DataModel):
     with driver.session() as session:
         
-        if DO_SIMPLE_EXTRACT:
-            insert_datamodel(session, datamodel.name, datamodel.type)
-        else:
-            insert_datamodel(session, datamodel.name, datamodel.type)
-
+        insert_datamodel(session, datamodel.name, datamodel.type)
         insert_downstream_datamodels(session, datamodel)
         
         if not DO_SIMPLE_EXTRACT:

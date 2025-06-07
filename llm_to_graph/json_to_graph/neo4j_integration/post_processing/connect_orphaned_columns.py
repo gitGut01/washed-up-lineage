@@ -1,8 +1,8 @@
-from neo4j_integration.base_connector import driver
-from shared.split_warehouse_schema_object import split_warehouse_schema_object, get_id_name
+from json_to_graph.neo4j_integration.base_connector import driver
+from json_to_graph.split_warehouse_schema_object import split_warehouse_schema_object, get_id_name
+from logger import logg_print
 
-
-def connect_orphaned_columns():
+def connect_orphaned_columns(logger):
     """
     Post-processing step to connect orphaned columns to their respective data models.
     
@@ -32,7 +32,7 @@ def connect_orphaned_columns():
             total_columns = session.run("MATCH (c:Column) RETURN count(c) as total").single()["total"]
             
             if not orphaned_columns:
-                print(f"Found {total_columns} total Column nodes, 0 orphaned columns to connect")
+                logg_print(logger, f"☑️ Found {total_columns} total Column nodes, 0 orphaned columns to connect")
                 return
                 
             connected_count = 0
@@ -85,7 +85,7 @@ def connect_orphaned_columns():
                     connected_count += 1
             
             # Print the single line summary
-            print(f"Found {total_columns} total Column nodes, successfully connected {connected_count} orphaned columns")
+            logg_print(logger, f"☑️ Found {total_columns} total Column nodes, successfully connected {connected_count} orphaned columns")
                 
     except Exception as e:
-        print(f"Error connecting orphaned columns: {e}")
+        logg_print(logger, f"❌ Error connecting orphaned columns: {e}")
