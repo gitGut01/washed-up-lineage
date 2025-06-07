@@ -93,12 +93,8 @@ export class CytoscapeService {
       {
         selector: 'edge',
         style: {
-          'line-color': 'red',
           'target-arrow-shape': 'triangle',
-          'target-arrow-color': 'red',
           "curve-style": "bezier"
-          //'source-endpoint': `53% 0%`,
-          //'target-endpoint': `-53% 0%`
         }
       }
     ]
