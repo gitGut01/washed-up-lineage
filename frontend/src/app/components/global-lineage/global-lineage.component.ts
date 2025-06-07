@@ -1,14 +1,8 @@
 import { Component, OnInit, ViewEncapsulation, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import cytoscape from 'cytoscape';
-import dagre from 'cytoscape-dagre';
 import { DataService } from '../../services/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CytoscapeService } from '../../services/cytoscape.service';
-import { DagreLayoutOptions } from '../../utils/cytoscape-utils';
-
-cytoscape.use(dagre);
-
-const LARGE_GRAPH_THRESHOLD = 200000;
 
 @Component({
   selector: 'app-global-lineage',
@@ -23,11 +17,6 @@ export class GlobalLineageComponent implements OnInit {
   private currentObjectId: string | null = null;
 
   private cy: cytoscape.Core | null = null;
-  // private graphState = { zoom: 1, pan: { x: 0, y: 0 } }; // Zoom/pan restoration removed
-  
-  // Performance optimization flags
-  nodeCount = 0;
-  isLargeGraph = false;
 
   constructor(
     private dataService: DataService,
@@ -43,149 +32,73 @@ export class GlobalLineageComponent implements OnInit {
       const newObjectId = params['object_id'];
       const path = '/global-lineage';
 
-      if (this.cy) { // If graph already exists
+      if (this.cy) {
         if (newObjectId && newObjectId !== this.currentObjectId) {
-          this.handleNodeSelectionChange(newObjectId);
+          this.cytoscapeService.selectAndCenter(this.cy, newObjectId);
           this.currentObjectId = newObjectId;
         } else if (!newObjectId && this.currentObjectId) {
-          // URL cleared object_id, deselect node
           this.cytoscapeService.deselectAllNodes(this.cy);
           this.currentObjectId = null;
-          // Optionally, fit/center the graph if a node was deselected and no new one is selected
-          // setTimeout(() => { // Ensure layout is stable if needed
-          //   if (this.cy && !this.currentObjectId) { 
-          //     this.cy.fit(undefined, 50);
-          //     this.cy.center();
-          //   }
-          // }, 0);
         }
-        // If newObjectId is the same as currentObjectId, or if newObjectId is null and currentObjectId was already null, do nothing.
-        this.cdr.markForCheck(); // Ensure UI updates if needed (e.g. info panel closing)
-        return; // In all cases where cy exists, we've handled it or decided to do nothing.
+        return;
       }
 
-      // If this.cy is null, it's an initial load or a scenario where the graph needs full re-creation.
-      this.currentObjectId = newObjectId; // Store for use in renderGraph/setUpCytoscapeInstance
-
-      // destroy previous instance if any (should be redundant if this.cy is null, but good practice)
-      // No need to call destroyCurrentCy() here if this.cy is confirmed null above.
-
-      this.cdr.markForCheck(); // Show loading state
-
+      this.currentObjectId = newObjectId;
       this.dataService.getAllObjects().subscribe(response => {
         if (response && response.elements) {
           response.elements = response.elements.map((element: any) => {
             if (element.group === 'nodes') {
               element.data = {
                 ...element.data,
-                id: element.data.name || element.data.id,
-                isSelected: false // Initialize isSelected
+                id: element.data.name,
+                isSelected: false
               };
             }
             return element;
           });
         }
-        // Pass currentObjectId (which might be null) to processAndRenderElements
-        this.processAndRenderElements(response, path, this.currentObjectId);
+
+        const elements = this.dataService.mapElements(response);
+        this.renderGraph(elements, path, this.currentObjectId);
       });
     });
-  }
-  
-  /**
-   * Process and render graph elements
-   */
-  private processAndRenderElements(response: any, path: string, objectIdToSelect?: string | null) {
-    // Process data outside Angular zone for better performance
-    this.ngZone.runOutsideAngular(() => {
-      // Chunk processing large datasets
-      const elements = this.dataService.mapElements(response);
-
-      this.nodeCount = elements.filter((el: any) => el.group === 'nodes').length;
-      this.isLargeGraph = this.nodeCount > LARGE_GRAPH_THRESHOLD;
-      this.renderGraph(elements, path, objectIdToSelect);
-    });
+    
   }
 
   renderGraph(elements: any[], path: string, objectIdToSelect?: string | null) {
     let cy: cytoscape.Core;
-    const cyContainer = document.getElementById('cy');
-
-    if (!cyContainer) {
-      console.error("Cytoscape container 'cy' not found!");
-      // Potentially hide loading indicator and return
-      this.ngZone.run(() => this.cdr.markForCheck());
-      return;
-    }
-
     cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, false);
     this.cytoscapeService.standardNodeStyling(cy);
 
-    this.cy = cy; // Set this.cy before calling setUpCytoscapeInstance
+    this.cy = cy;
+    this.setUpCytoscapeInstance(cy, path);
 
-    // Pass objectIdToSelect for initial focus, if any.
-    this.setUpCytoscapeInstance(cy, path, objectIdToSelect);
-
-    // Conditional fit and center: Only if no specific node is being selected initially.
-    if (!objectIdToSelect) {
-      setTimeout(() => { // Delay to allow layout to settle before fitting
-        try {
-          if (cy && !cy.destroyed()) { // Check if cy still exists and is not destroyed
-            cy.fit(undefined, 50); // Add some padding
-            cy.center();
-          }
-        } catch (e) {
-          console.warn('Error centering graph:', e);
-        }
-      }, 100); // A small delay can help ensure layout calculations are done.
+    if (objectIdToSelect) {
+      this.cytoscapeService.selectAndCenter(cy, objectIdToSelect, 100);
+      return;
     }
 
-    // Hide loading indicator
-    this.ngZone.run(() => this.cdr.markForCheck());
-  } // This closes renderGraph
+    cy.fit(undefined, 50);
+    cy.center();
+  }
 
-  setUpCytoscapeInstance(cy: cytoscape.Core, path: string, objectIdToSelect?: string | null) {
+  setUpCytoscapeInstance(cy: cytoscape.Core, path: string) {
+    
     cy.on('tap', 'node', (event) => {
       const node = event.target;
       const tappedObjectId = node.data().id;
 
-      // Update URL, which will trigger queryParams.subscribe in ngOnInit
       const queryParams: any = {
         object_id: tappedObjectId,
-        show_info: true // Add show_info parameter
+        show_info: true
       };
       this.router.navigate([path], { queryParams, queryParamsHandling: 'merge' });
     });
 
     cy.on('tap', (event) => {
       if (event.target === cy) {
-        // Clear selection and show_info by navigating with empty query params
         this.router.navigate([path], { queryParams: { object_id: null, show_info: null }, queryParamsHandling: 'merge' });
       }
     });
-    
-    // Initial selection based on objectIdToSelect passed from renderGraph (originating from URL params on load)
-    if (objectIdToSelect && this.cy && !this.cy.destroyed()) {
-      // this.currentObjectId should already be set to objectIdToSelect by ngOnInit before graph rendering starts
-      // Perform selection and centering. The 0ms duration makes it instant for initial load.
-      this.cytoscapeService.selectAndCenter(this.cy, objectIdToSelect, 0);
-      // No need to update this.currentObjectId here again if ngOnInit already set it correctly before calling render pipeline.
-    }
   }
-
-  destroyCurrentCy() {
-  if (this.cy) {
-    // this.graphState.zoom = this.cy.zoom(); // Removed: No longer restoring zoom/pan
-    // this.graphState.pan = this.cy.pan();   // Removed: No longer restoring zoom/pan
-    this.cy.destroy();
-    this.cy = null;
-  }
-}
-
-private handleNodeSelectionChange(objectId: string) {
-  if (this.cy) {
-    this.cytoscapeService.selectAndCenter(this.cy, objectId);
-    // Potentially markForCheck if other UI elements depend on selection and are OnPush
-    this.cdr.markForCheck(); 
-  }
-}
-}
+} 

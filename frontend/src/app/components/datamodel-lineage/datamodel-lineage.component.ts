@@ -77,26 +77,19 @@ export class DatamodelLineageComponent implements OnInit {
       const elements = this.dataService.mapElements(response);
 
       this.nodeCount = elements.filter((el: any) => el.group === 'nodes').length;
-      this.isLargeGraph = this.nodeCount > LARGE_GRAPH_THRESHOLD;
       this.renderGraph(elements, path);
     });
   }
 
   renderGraph(elements: any[], path: string) {
-    
     let cy: cytoscape.Core;
 
-    if (this.isLargeGraph) {
-      cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, false);
-      this.cytoscapeService.standardNodeStyling(cy);
-    }else{
-      cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, true);
-      defineNodeHtmlNode(cy);
-      setTimeout(() => {
-        adjustLabelSize(cy);
-      }, 0);
-      this.cytoscapeService.htmlNodeStyling(cy);
-    }
+    cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, true);
+    defineNodeHtmlNode(cy);
+    setTimeout(() => {
+      adjustLabelSize(cy);
+    }, 0);
+    this.cytoscapeService.htmlNodeStyling(cy);
 
     
     // restore zoom and pan if we have previous state, otherwise center the graph

@@ -43,7 +43,7 @@ export class CytoscapeService {
         'color': '#000',
         'font-weight': 'bold',
         'font-size': '12px',
-        'width': 'label',
+        'width': (node:any) => { return node.data('name').length * 8 },
         'height': '10px',
         'padding-left': '25px',
         'padding-right': '25px',
@@ -81,10 +81,34 @@ export class CytoscapeService {
       selector: 'node:selected',
       style: {
         'border-width': '10px',
+        'height': '30px',
+      },
+    },
+    {
+      selector: 'node[node_type = "NORMAL"]:selected',
+      style: {
+        'border-color': 'blue',
+      },
+    },
+    {
+      selector: 'node[node_type = "LEAF"]:selected',
+      style: {
+        'border-color': 'orange',
+      },
+    },
+    {
+      selector: 'node[node_type = "ROOT"]:selected',
+      style: {
+        'border-color': 'green',
+      },
+    },
+    {
+      selector: 'node[node_type = "StoredProcedure"]:selected',
+      style: {
         'border-color': 'grey',
       },
     }]
-
+    
     return jsons;
   }
 
@@ -208,7 +232,6 @@ export class CytoscapeService {
 
   standardNodeStyling(cy: cytoscape.Core) {
     let noHTMLStyling = [...this.getNoHtmlStylingLabel(), ...this.getNoHtmlStylingEdges()];
-    console.log(noHTMLStyling);
     cy.style()
     .fromJson(noHTMLStyling)
     .update(); 
