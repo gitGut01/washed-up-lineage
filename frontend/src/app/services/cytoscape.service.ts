@@ -93,8 +93,12 @@ export class CytoscapeService {
       {
         selector: 'edge',
         style: {
-          'source-endpoint': `53% 0%`,
-          'target-endpoint': `-53% 0%`
+          'line-color': 'red',
+          'target-arrow-shape': 'triangle',
+          'target-arrow-color': 'red',
+          "curve-style": "bezier"
+          //'source-endpoint': `53% 0%`,
+          //'target-endpoint': `-53% 0%`
         }
       }
     ]
@@ -205,8 +209,8 @@ export class CytoscapeService {
 
 
   standardNodeStyling(cy: cytoscape.Core) {
-    let noHTMLStyling = [...this.getNoHtmlStylingLabel(), ...this.getLineModeStyling(), ...this.getNoHtmlStylingEdges()];
-
+    let noHTMLStyling = [...this.getNoHtmlStylingLabel(), ...this.getNoHtmlStylingEdges()];
+    console.log(noHTMLStyling);
     cy.style()
     .fromJson(noHTMLStyling)
     .update(); 

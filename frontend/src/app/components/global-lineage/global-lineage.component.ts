@@ -22,22 +22,6 @@ const LARGE_GRAPH_THRESHOLD = 200000;
 export class GlobalLineageComponent implements OnInit {
   private currentObjectId: string | null = null;
 
-  private getCustomLayoutOptions(): DagreLayoutOptions {
-    return {
-      name: 'dagre',
-      rankDir: 'LR',
-      ranker: 'tight-tree',
-      nodeSep: 200,
-      edgeSep: 100,
-      rankSep: 500, // Specific to global-lineage (derived from isDatamodel=true in service)
-      acyclicer: 'greedy',
-      align: 'DR',
-      edgeWeight: (edge: cytoscape.EdgeSingular): number => {
-        return edge.source().data('type') === 'StoredProcedure' ? 1 : 30;
-      }
-    } as DagreLayoutOptions; // Added 'as DagreLayoutOptions' for type assertion if interface is not exhaustive
-  }
-
   private cy: cytoscape.Core | null = null;
   // private graphState = { zoom: 1, pan: { x: 0, y: 0 } }; // Zoom/pan restoration removed
   
@@ -59,17 +43,13 @@ export class GlobalLineageComponent implements OnInit {
       const newObjectId = params['object_id'];
       const path = '/global-lineage';
 
+      
       if (this.cy && newObjectId && newObjectId !== this.currentObjectId) {
-        // Graph exists, and a new, different node is selected via URL
         this.handleNodeSelectionChange(newObjectId);
         this.currentObjectId = newObjectId;
         return; // Prevent full re-render
       } else if (this.cy && !newObjectId && this.currentObjectId) {
-        // Graph exists, and selection is cleared via URL
         this.cytoscapeService.deselectAllNodes(this.cy);
-        // Optionally, recenter or fit the graph
-        // this.cy.fit(undefined, 50); // Add padding
-        // this.cy.center();
         this.currentObjectId = null;
         return; // Prevent full re-render
       }
@@ -128,19 +108,7 @@ export class GlobalLineageComponent implements OnInit {
       return;
     }
 
-    cy = cytoscape({
-      container: cyContainer,
-      elements: elements,
-      zoomingEnabled: true,
-      userZoomingEnabled: true,
-      minZoom: 0.1,
-      maxZoom: 2,
-      layout: this.getCustomLayoutOptions(),
-    });
-
-
-    this.cytoscapeService.backgroundDotStyling(cy, cyContainer);
-    this.cytoscapeService.mouseOverStyle(cy, cyContainer);
+    cy = this.cytoscapeService.initializeCytoscape('cy', elements, true, false);
     this.cytoscapeService.standardNodeStyling(cy);
     
     // Always fit and center the graph on initial render or full reload
