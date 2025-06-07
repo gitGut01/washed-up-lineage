@@ -120,6 +120,8 @@ export class CytoscapeService {
           'target-arrow-color': 'black',
           'target-arrow-shape': 'triangle',
           "curve-style": "bezier",
+          'source-endpoint': '52% 0%',
+          'target-endpoint': '-52% 0%', 
           "arrow-scale": 2 
         }
       }
