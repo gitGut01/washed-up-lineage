@@ -25,7 +25,8 @@ from db_stats_integration.get_datatests_stats import (
 
 from db_stats_integration.get_ingestion_stats import (
     get_latest_ingestions, 
-    get_latest_ingestion_by_id
+    get_latest_ingestion_by_id,
+    get_historical_ingestions_by_id
 )
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -95,8 +96,11 @@ async def api_get_latest_ingestion():
 
 @app.get('/api/ingestion/{id}')
 async def api_get_ingestion_by_id(id: str):
-    return get_latest_ingestion_by_id(id).to_dict(orient='records')
+    return get_latest_ingestion_by_id(id)
 
+@app.get('/api/ingestion/historical/{id}')
+async def api_get_historical_ingestions(id: str):
+    return get_historical_ingestions_by_id(id).to_dict(orient='records')
 
 if __name__ == '__main__':
     import uvicorn

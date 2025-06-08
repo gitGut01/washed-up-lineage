@@ -15,8 +15,15 @@ def get_latest_ingestions(file_path:str=INGESTION_PATH) -> pd.DataFrame:
     return df.sort_values('LoadTime', ascending=False).drop_duplicates('ID')
 
 
-def get_latest_ingestion_by_id(target_id: str, file_path:str=INGESTION_PATH) -> pd.DataFrame:
+def get_latest_ingestion_by_id(target_id: str, file_path:str=INGESTION_PATH):
+    df = _read_ingestion_csv(file_path)
+    df = df[df['ID'] == target_id].sort_values('LoadTime', ascending=False)
+    row = df.iloc[0]
+    cleaned = {k: (v.item() if hasattr(v, 'item') else v) for k, v in row.to_dict().items()}
+    return cleaned
+
+
+def get_historical_ingestions_by_id(target_id: str, file_path:str=INGESTION_PATH) -> pd.DataFrame:
     df = _read_ingestion_csv(file_path)
     return df[df['ID'] == target_id].sort_values('LoadTime', ascending=False)
-
 
