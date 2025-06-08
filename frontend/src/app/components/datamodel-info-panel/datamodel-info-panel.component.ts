@@ -35,6 +35,9 @@ export class DatamodelInfoPanelComponent implements OnInit {
   highlightedColumnId: string | null = null;
   searchQuery: string = '';
   panelWidth: number = 300;
+  activeTab: string = 'columns';
+  dataTests: { name: string, description: string, status: string }[] = [];
+  historyItems: { timestamp: string, type: string, user: string, description: string }[] = [];
   
   // Computed property to determine if we're in the object lineage view
   get lineageToggle(): boolean {
@@ -264,5 +267,117 @@ export class DatamodelInfoPanelComponent implements OnInit {
     } catch (e) {
       return dateString;
     }
+  }
+
+  /**
+   * Set the active tab and fetch data if needed
+   */
+  setActiveTab(tabName: string) {
+    this.activeTab = tabName;
+    
+    // If switching to data tests tab and we don't have data yet, fetch it
+    if (tabName === 'data-tests' && this.dataTests.length === 0 && this.objectId) {
+      this.fetchDataTests(this.objectId);
+    }
+    
+    // If switching to history tab and we don't have data yet, fetch it
+    if (tabName === 'history' && this.historyItems.length === 0 && this.objectId) {
+      this.fetchHistory(this.objectId);
+    }
+    
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Fetch data tests for the current object
+   * Note: This is a placeholder method. You'll need to implement the actual API call
+   * in the DataService when that functionality is available.
+   */
+  fetchDataTests(objectId: string) {
+    // This is a placeholder for future implementation
+    // When the API is available, uncomment and implement:
+    /*
+    this.dataService.getDataTestsById(objectId).subscribe(
+      (data) => {
+        this.dataTests = data;
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.error('Error fetching data tests:', error);
+        this.dataTests = [];
+        this.cdr.markForCheck();
+      }
+    );
+    */
+    
+    // For now, just set some sample data to demonstrate the UI
+    setTimeout(() => {
+      this.dataTests = [
+        { 
+          name: 'Not Null Check', 
+          description: 'Ensures all required fields have values', 
+          status: 'passed' 
+        },
+        { 
+          name: 'Data Type Validation', 
+          description: 'Validates that data types match schema definitions', 
+          status: 'passed' 
+        },
+        { 
+          name: 'Uniqueness Check', 
+          description: 'Verifies primary key columns contain unique values', 
+          status: 'failed' 
+        }
+      ];
+      this.cdr.markForCheck();
+    }, 500);
+  }
+  
+  /**
+   * Fetch history data for the current object
+   * Note: This is a placeholder method. You'll need to implement the actual API call
+   * in the DataService when that functionality is available.
+   */
+  fetchHistory(objectId: string) {
+    // This is a placeholder for future implementation
+    // When the API is available, uncomment and implement:
+    /*
+    this.dataService.getHistoryById(objectId).subscribe(
+      (data) => {
+        this.historyItems = data;
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.error('Error fetching history:', error);
+        this.historyItems = [];
+        this.cdr.markForCheck();
+      }
+    );
+    */
+    
+    // For now, just set some sample data to demonstrate the UI
+    setTimeout(() => {
+      this.historyItems = [
+        { 
+          timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+          type: 'update',
+          user: 'john.doe@example.com',
+          description: 'Updated column types for better compatibility' 
+        },
+        { 
+          timestamp: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+          type: 'schema',
+          user: 'jane.smith@example.com',
+          description: 'Added new columns for customer segmentation' 
+        },
+        { 
+          timestamp: new Date(Date.now() - 604800000).toISOString(), // 7 days ago
+          type: 'create',
+          user: 'admin@example.com',
+          description: 'Initial table creation' 
+        }
+      ];
+      this.cdr.markForCheck();
+    }, 500);
   }
 }

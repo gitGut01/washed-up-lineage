@@ -95,27 +95,96 @@
       {{ toastMessage }}
     </div>
   </div>
-  <ng-container *ngIf="columns && columns.length > 0">
-    <h4>Columns</h4>
-    <input type="text" placeholder="Search columns..." [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange($event)" class="search-input"/>
-    <div class="columns-list">
-      <ul>
-        <li *ngFor="let column of filteredColumnsCache" 
-            (click)="onColumnClick(column)"
-            [class.highlight]="column.column_id === highlightedColumnId">
-          <span class="column-name">{{ column.name }}</span>
-          <div class="column-type-wrapper">
-            <span class="column-type">{{ column.type }}</span>
-            <span class="type-indicator" 
-                  [ngClass]="{
-                    'blue-indicator': column.is_type_guessed && column.is_type_updated,
-                    'green-indicator': !column.is_type_guessed,
-                    'red-indicator': column.is_type_guessed && !column.is_type_updated
-                  }">
-            </span>
-          </div>
-        </li>
-      </ul>
+  <div class="tabs-container">
+    <div class="tabs-header">
+      <div class="tab" [class.active]="activeTab === 'columns'" (click)="setActiveTab('columns')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path>
+        </svg>
+        <span>Columns</span>
+      </div>
+      <div class="tab" [class.active]="activeTab === 'data-tests'" (click)="setActiveTab('data-tests')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 2h6"></path>
+          <path d="M12 2v6.5l4.5 8.5a3 3 0 1 1-9 0l4.5-8.5V2"></path>
+          <path d="M10 14h4"></path>
+        </svg>
+        <span>Data Tests</span>
+      </div>
+      <div class="tab" [class.active]="activeTab === 'history'" (click)="setActiveTab('history')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"></path>
+          <path d="M12 8v4l3 3"></path>
+        </svg>
+        <span>History</span>
+      </div>
     </div>
-  </ng-container>
+    
+    <div class="tab-content">
+      <!-- Columns Tab Content -->
+      <div *ngIf="activeTab === 'columns' && columns && columns.length > 0" class="tab-pane">
+        <input type="text" placeholder="Search columns..." [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange($event)" class="search-input"/>
+        <div class="columns-list">
+          <ul>
+            <li *ngFor="let column of filteredColumnsCache" 
+                (click)="onColumnClick(column)"
+                [class.highlight]="column.column_id === highlightedColumnId">
+              <span class="column-name">{{ column.name }}</span>
+              <div class="column-type-wrapper">
+                <span class="column-type">{{ column.type }}</span>
+                <span class="type-indicator" 
+                      [ngClass]="{
+                        'blue-indicator': column.is_type_guessed && column.is_type_updated,
+                        'green-indicator': !column.is_type_guessed,
+                        'red-indicator': column.is_type_guessed && !column.is_type_updated
+                      }">
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Data Tests Tab Content -->
+      <div *ngIf="activeTab === 'data-tests'" class="tab-pane">
+        <div *ngIf="dataTests && dataTests.length > 0" class="data-tests-list">
+          <ul>
+            <li *ngFor="let test of dataTests" class="data-test-item">
+              <div class="test-header">
+                <span class="test-name">{{ test.name }}</span>
+                <span class="test-status" [ngClass]="{'passed': test.status === 'passed', 'failed': test.status === 'failed'}">
+                  {{ test.status }}
+                </span>
+              </div>
+              <div class="test-description">{{ test.description }}</div>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="!dataTests || dataTests.length === 0" class="no-data">
+          No data tests available for this object.
+        </div>
+      </div>
+      
+      <!-- History Tab Content -->
+      <div *ngIf="activeTab === 'history'" class="tab-pane">
+        <div *ngIf="historyItems && historyItems.length > 0" class="history-list">
+          <ul>
+            <li *ngFor="let item of historyItems" class="history-item">
+              <div class="history-header">
+                <span class="history-timestamp">{{ formatDate(item.timestamp) }}</span>
+                <span class="history-type" [ngClass]="item.type">{{ item.type }}</span>
+              </div>
+              <div class="history-details">
+                <div class="history-user">{{ item.user }}</div>
+                <div class="history-description">{{ item.description }}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="!historyItems || historyItems.length === 0" class="no-data">
+          No history available for this object.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
