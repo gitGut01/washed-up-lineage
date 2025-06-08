@@ -18,6 +18,16 @@ from neo4j_integration.fetch_object_lineage import (
     fetch_object_lineage_edges
 )
 
+from db_stats_integration.get_datatests_stats import (
+    get_latest_test_runs, 
+    get_historical_tests
+)
+
+from db_stats_integration.get_ingestion_stats import (
+    get_latest_ingestions, 
+    get_latest_ingestion_by_id
+)
+
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 
@@ -68,7 +78,24 @@ async def get_column_lineage(name: str):
     elements = nodes + edges
     return {'elements': elements}
 
-# Legacy procedure endpoints removed - handled by object endpoints
+
+
+
+@app.get('/api/datatests/latest')
+async def api_get_latest_test_run():
+    return get_latest_test_runs().to_dict(orient='records')
+
+@app.get('/api/datatests/historical/{id}')
+async def api_get_historical_tests(id: str):
+    return get_historical_tests(id)
+
+@app.get('/api/ingestion/latest')
+async def api_get_latest_ingestion():
+    return get_latest_ingestions().to_dict(orient='records')
+
+@app.get('/api/ingestion/{id}')
+async def api_get_ingestion_by_id(id: str):
+    return get_latest_ingestion_by_id(id).to_dict(orient='records')
 
 
 if __name__ == '__main__':

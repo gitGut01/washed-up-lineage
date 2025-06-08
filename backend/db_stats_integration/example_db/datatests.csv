@@ -1,0 +1,30 @@
+ID;DataTestName;IsGlobal;ColumnName;TestTime;TestDuration;ErrorMessage;IsSuccess
+MY_WAREHOUSE.DBO.GET_MEAT;IsNotNull;false;product_id;2023-05-12T14:30:22;0.45;;true
+MY_WAREHOUSE.DBO.GET_MEAT;IsNotNull;false;product_name;2023-05-12T14:30:22;0.45;;true
+MY_WAREHOUSE.DBO.GET_MEAT;IsUnique;false;product_id;2023-05-12T14:30:22;0.45;;true
+MY_WAREHOUSE.DBO.GET_MEAT;HasValue;false;category;2023-05-12T14:30:22;0.45;Column 'category' contains 3 NULL values;false
+MY_WAREHOUSE.DBO.GET_MEAT;RowCountMatch;true;;2023-05-12T14:30:22;0.45;;true
+MY_WAREHOUSE.DBO.GET_SPICES;IsNotNull;false;spice_id;2024-01-03T09:15:45;0.45;;true
+MY_WAREHOUSE.DBO.GET_SPICES;IsUnique;false;spice_id;2024-01-03T09:15:45;0.45;;true
+MY_WAREHOUSE.DBO.GET_SPICES;IsNotNull;false;spice_name;2024-01-03T09:15:45;0.45;Column 'spice_name' contains NULL values;false
+MY_WAREHOUSE.DBO.GET_SPICES;MinimumRowCount;true;;2024-01-03T09:15:45;0.45;Expected minimum 100 rows, found 87;false
+MY_WAREHOUSE.DBO.GET_EGGS;IsNotNull;false;egg_id;2022-11-18T11:22:33;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;IsUnique;false;egg_id;2022-11-18T11:22:33;0.39;Duplicate values found in 'egg_id' column;false
+MY_WAREHOUSE.DBO.GET_EGGS;HasValue;false;egg_size;2022-11-18T11:22:33;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2022-11-18T11:22:33;0.39;;true
+MY_WAREHOUSE.DBO.GET_BUNS;IsNotNull;false;bun_id;2024-03-27T16:45:12;0.36;;true
+MY_WAREHOUSE.DBO.GET_BUNS;IsUnique;false;bun_id;2024-03-27T16:45:12;0.36;;true
+MY_WAREHOUSE.DBO.GET_BUNS;IsNotNull;false;bun_type;2024-03-27T16:45:12;0.36;;true
+MY_WAREHOUSE.DBO.GET_BUNS;MinimumRowCount;true;;2024-03-27T16:45:12;0.36;;true
+MY_WAREHOUSE.DBO.GET_TOMATOES;IsNotNull;false;tomato_id;2023-08-05T08:12:55;0.41;;true
+MY_WAREHOUSE.DBO.GET_TOMATOES;IsUnique;false;tomato_id;2023-08-05T08:12:55;0.41;;true
+MY_WAREHOUSE.DBO.GET_TOMATOES;HasValue;false;ripeness;2023-08-05T08:12:55;0.41;Column 'ripeness' contains 12 empty string values;false
+MY_WAREHOUSE.DBO.GET_TOMATOES;RowCountMatch;true;;2023-08-05T08:12:55;0.41;Expected 250 rows, found 235;false
+MY_WAREHOUSE.DBO.GET_SALAT;IsNotNull;false;salat_id;2022-06-30T13:27:40;0.38;;true
+MY_WAREHOUSE.DBO.GET_SALAT;IsUnique;false;salat_id;2022-06-30T13:27:40;0.38;Duplicate values found in 'salat_id' column;false
+MY_WAREHOUSE.DBO.GET_SALAT;IsNotNull;false;salat_type;2022-06-30T13:27:40;0.38;;true
+MY_WAREHOUSE.DBO.GET_SALAT;MinimumRowCount;true;;2022-06-30T13:27:40;0.38;;true
+MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;IsNotNull;false;sennep_id;2023-12-14T10:05:18;0.39;;true
+MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;IsUnique;false;sennep_id;2023-12-14T10:05:18;0.39;;true
+MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;HasValue;false;expiry_date;2023-12-14T10:05:18;0.39;Column 'expiry_date' contains 5 NULL values;false
+MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;RowCountMatch;true;;2023-12-14T10:05:18;0.39;;true
