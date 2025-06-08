@@ -56,6 +56,3 @@ def get_historical_tests(target_id: str, file_path:str=DATATESTS_PATH) -> List[D
     
     return result
 
-
-if __name__ == "__main__":
-    print(get_historical_tests("MY_WAREHOUSE.DBO.GET_EGGS"))

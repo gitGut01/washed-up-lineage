@@ -12,6 +12,8 @@ MY_WAREHOUSE.DBO.GET_EGGS;IsNotNull;false;egg_id;2022-11-18T11:22:33;0.39;;true
 MY_WAREHOUSE.DBO.GET_EGGS;IsUnique;false;egg_id;2022-11-18T11:22:33;0.39;Duplicate values found in 'egg_id' column;false
 MY_WAREHOUSE.DBO.GET_EGGS;HasValue;false;egg_size;2022-11-18T11:22:33;0.39;;true
 MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2022-11-18T11:22:33;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2022-10-18T11:22:33;0.39;Not good;false
+MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2022-09-18T11:22:33;0.39;;true
 MY_WAREHOUSE.DBO.GET_BUNS;IsNotNull;false;bun_id;2024-03-27T16:45:12;0.36;;true
 MY_WAREHOUSE.DBO.GET_BUNS;IsUnique;false;bun_id;2024-03-27T16:45:12;0.36;;true
 MY_WAREHOUSE.DBO.GET_BUNS;IsNotNull;false;bun_type;2024-03-27T16:45:12;0.36;;true
