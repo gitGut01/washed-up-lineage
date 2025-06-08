@@ -11,6 +11,7 @@ export class DataService {
   private datamodelUrl = 'http://localhost:8000/api/datamodels';
   private columnsUrl = 'http://localhost:8000/api/columns';
   private baseUrl = 'http://localhost:8000/api'; // Ensure consistent API base
+  private ingestionUrl = 'http://localhost:8000/api/ingestion'; // URL for ingestion data
   
   // Cache storage
   private cache: { [key: string]: Observable<any> } = {};
@@ -316,6 +317,19 @@ export class DataService {
   // Clear entire cache
   clearAllCache(): void {
     this.cache = {};
+  }
+
+  /**
+   * Get the latest ingestion data for a specific object by ID
+   */
+  getIngestionById(id: string): Observable<any> {
+    const cacheKey = `ingestion_${id}`;
+    if (!this.cache[cacheKey]) {
+      const url = `${this.ingestionUrl}/${id}`;
+      this.cache[cacheKey] = this.http.get<any>(url)
+        .pipe(shareReplay(1));
+    }
+    return this.cache[cacheKey];
   }
 
 }

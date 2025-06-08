@@ -398,6 +398,30 @@
   background-color: #29b6f6; // Light blue
 }
 
+.ingestion-info {
+  font-family: 'Courier New', Courier, monospace;
+  color: #777777;
+  font-size: 0.7em;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.status-icon {
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+  
+  &.success {
+    color: #4caf50; // Green color for success
+  }
+  
+  &.failure {
+    color: #f44336; // Red color for failure
+  }
+}
+
 // Highlighted datamodel name box
 .model-name-box {
   display: flex;

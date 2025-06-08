@@ -28,6 +28,7 @@ export class DatamodelInfoPanelComponent implements OnInit {
   object: string = '';
   showToast: boolean = false;
   toastMessage: string = '';
+  ingestionData: { ID: string, LoadTime: string, IsSuccess: boolean } | null = null;
   columns: { name: string, type: string, column_id: string, is_type_guessed: boolean, is_type_updated: boolean }[] = [];
   filteredColumnsCache: { name: string, type: string, column_id: string, is_type_guessed: boolean, is_type_updated: boolean }[] = [];
   isOpen = false;
@@ -85,6 +86,9 @@ export class DatamodelInfoPanelComponent implements OnInit {
         this.warehouse = data_result.warehouse || '';
         this.schema = data_result.schema || '';
         this.object = data_result.object || '';
+        
+        // Fetch ingestion data for this object
+        this.fetchIngestionData(this.objectId);
         
         this.cdr.markForCheck();
       } else {
@@ -230,5 +234,35 @@ export class DatamodelInfoPanelComponent implements OnInit {
   @HostListener('document:mouseup', ['$event'])
   onMouseUp() {
     this.resizing = false;
+  }
+  
+  /**
+   * Fetch ingestion data for the current object
+   */
+  fetchIngestionData(objectId: string) {
+    this.dataService.getIngestionById(objectId).subscribe(
+      (data) => {
+        this.ingestionData = data;
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.error('Error fetching ingestion data:', error);
+        this.ingestionData = null;
+        this.cdr.markForCheck();
+      }
+    );
+  }
+  
+  /**
+   * Format the date string for display
+   */
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleString();
+    } catch (e) {
+      return dateString;
+    }
   }
 }
