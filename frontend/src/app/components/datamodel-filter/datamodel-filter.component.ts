@@ -124,9 +124,14 @@ export class DatamodelFilterComponent implements OnInit {
       };
     }
     
+    // Close all filter dropdowns when opening the filter options dropdown
+    if (!this.showFilterOptions) {
+      this.activeFilters.forEach(f => {
+        f.isOpen = false;
+      });
+    }
+    
     this.showFilterOptions = !this.showFilterOptions;
-    // Close any open filter dropdown when showing/hiding filter type selection
-    this.filters.forEach(filter => filter.isOpen = false);
   }
 
   addFilter(filterType: FilterType) {
@@ -149,9 +154,13 @@ export class DatamodelFilterComponent implements OnInit {
 
   toggleFilter(filter: Filter) {
     // Close all other filters first
-    this.filters.forEach(f => {
+    this.activeFilters.forEach(f => {
       if (f !== filter) f.isOpen = false;
     });
+    
+    // Also close the '+ Add Filter' dropdown
+    this.showFilterOptions = false;
+    
     filter.isOpen = !filter.isOpen;
   }
 
