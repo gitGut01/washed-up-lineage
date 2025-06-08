@@ -52,8 +52,8 @@
       </div>
     </ng-container>
     
-    <!-- Add filter button with dropdown -->
-    <div class="filter-button-container">
+    <!-- Add filter button with dropdown - only shown if there are available filters -->
+    <div class="filter-button-container" *ngIf="getAvailableFilterTypes().length > 0">
       <button class="add-filter" (click)="toggleFilterOptions($event)">
         + Add Filter
       </button>
@@ -66,9 +66,6 @@
           (click)="addFilter(filterType.type)"
         >
           {{ filterType.label }} Filter
-        </div>
-        <div class="no-filters-available" *ngIf="getAvailableFilterTypes().length === 0">
-          All filters are active
         </div>
       </div>
     </div>

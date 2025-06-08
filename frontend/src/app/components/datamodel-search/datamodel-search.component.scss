@@ -117,19 +117,22 @@
 
   .search-wrapper {
   position: relative;
-  width: 50em;
-  max-width: 50em;
-  transition: max-width 0.3s ease;
+  width: 100%;
+  transition: width 0.3s ease, max-width 0.3s ease;
   
   &.has-selection {
-    max-width: 50em;
+    width: 100%;
+  }
+  
+  &:focus-within, &:hover {
+    width: 100%;
   }
   
   @media (max-width: 992px) {
-    max-width: 100%;
+    width: 100%;
     
     &.has-selection {
-      max-width: 100%;
+      width: 100%;
     }
   }
 }
