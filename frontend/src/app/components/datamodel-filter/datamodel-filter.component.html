@@ -27,25 +27,26 @@
           </div>
           
           <div class="filter-options">
-            <div class="option select-all">
+            <div class="option select-all" (click)="toggleSelectAll(filter)">
               <input 
                 type="checkbox" 
                 [checked]="isAllSelected(filter)" 
-                (change)="toggleSelectAll(filter)"
+                (change)="$event.stopPropagation(); toggleSelectAll(filter)"
               />
-              <span (click)="toggleSelectAll(filter)">Select All</span>
+              <span>Select All</span>
             </div>
             
             <div 
               class="option" 
               *ngFor="let option of getFilteredOptions(filter)" 
+              (click)="toggleOption(filter, option)"
             >
               <input 
                 type="checkbox" 
                 [checked]="isOptionSelected(filter, option)" 
-                (change)="toggleOption(filter, option)"
+                (change)="$event.stopPropagation(); toggleOption(filter, option)"
               />
-              <span (click)="toggleOption(filter, option)">{{ option }}</span>
+              <span>{{ option }}</span>
             </div>
           </div>
         </div>

@@ -7,15 +7,16 @@
 // Active filters container
 .active-filters {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
   position: relative;
+  width: 100%; // Ensure full width
 }
 
 // Individual filter pill style
 .filter-pill {
-  display: flex;
+  display: inline-flex; // Changed to inline-flex
   align-items: center;
   background-color: #3182ce;
   color: white;
@@ -25,6 +26,9 @@
   cursor: pointer;
   position: relative;
   transition: all 0.2s ease;
+  width: auto; // Changed from 100% to auto
+  box-sizing: border-box;
+  max-width: 100%; // Prevent overflow
   
   &:hover {
     background-color: #2b6cb0;
@@ -67,7 +71,8 @@
 // Filter button container for proper dropdown positioning
 .filter-button-container {
   position: relative;
-  display: inline-block;
+  display: block; // Changed from inline-block to block for vertical layout
+  width: 100%; // Take up full width
 }
 
 // Add filter button
@@ -81,6 +86,9 @@
   cursor: pointer;
   transition: all 0.2s ease;
   backdrop-filter: blur(2px);
+  width: auto; // Changed to auto to match filter pill styling
+  box-sizing: border-box;
+  display: inline-flex; // Match filter pill display
   
   &:hover {
     border-color: #3182ce;
@@ -224,11 +232,24 @@
     align-items: center;
     padding: 8px 16px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
     color: #333;
+    position: relative;
     
+    // Highlight effect on hover
     &:hover {
       background-color: #f0f7ff;
+    }
+    
+    // Add subtle indicator on hover
+    &:hover::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background-color: #3182ce;
     }
     
     &.select-all {
@@ -240,10 +261,13 @@
     
     span {
       color: #333;
+      flex: 1; // Make span take up remaining space for better click area
+      padding: 4px 0; // Add some vertical padding to increase hit area
     }
     
     input[type="checkbox"] {
       margin-right: 10px;
+      cursor: pointer;
     }
   }
 }

@@ -26,6 +26,7 @@ export class DatamodelSearchComponent {
   searchTerm: string = '';
   hasSelection: boolean = false;
   selectedIndex: number = -1;
+  private blurTimeoutId: any = null;
 
   constructor(private dataService: DataService, private router: Router, private route: ActivatedRoute) {}
 
@@ -134,5 +135,22 @@ export class DatamodelSearchComponent {
 
   isSelected(index: number): boolean {
     return this.selectedIndex === index;
+  }
+  
+  /**
+   * Hide search results dropdown when input loses focus
+   * Uses a small delay to allow clicking on results
+   */
+  hideResultsDelayed(): void {
+    // Clear any existing timeout
+    if (this.blurTimeoutId !== null) {
+      clearTimeout(this.blurTimeoutId);
+    }
+    
+    // Set a small timeout to allow clicking on results
+    this.blurTimeoutId = setTimeout(() => {
+      this.searchResults = [];
+      this.selectedIndex = -1;
+    }, 150); // 150ms delay gives enough time to click a result
   }
 }

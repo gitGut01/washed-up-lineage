@@ -115,27 +115,17 @@
   font-weight: 600;
 }
 
-  .search-wrapper {
+/* Search wrapper container */
+.search-wrapper {
   position: relative;
   width: 100%;
-  transition: width 0.3s ease, max-width 0.3s ease;
+  /* Remove unnecessary transitions that cause the stacked appearance */
   
   &.has-selection {
     width: 100%;
   }
-  
-  &:focus-within, &:hover {
-    width: 100%;
-  }
-  
-  @media (max-width: 992px) {
-    width: 100%;
-    
-    &.has-selection {
-      width: 100%;
-    }
-  }
 }
+
 
 .search-container {
   position: relative;
@@ -144,13 +134,13 @@
   width: 100%;
 }
 
-  .search-container input {
+.search-container input {
   width: 100%;
   padding: 10px 38px 10px 40px;
   font-size: 0.95em;
   border: 2px solid #e2e8f0;
   border-radius: 8px;
-  transition: all 0.2s ease, padding 0.3s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   background-color: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   
@@ -164,9 +154,12 @@
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
   }
   
+  &:hover:not(:focus) {
+    border-color: #cbd5e0;
+  }
+  
   &::placeholder {
     color: #a0aec0;
-    transition: opacity 0.2s ease;
     .has-selection & {
       opacity: 0;
     }
@@ -254,10 +247,7 @@
   }
 }
 
-  /* Ensure wrapper is positioned for dropdown */
-  .search-wrapper {
-    position: relative;
-  }
+  /* Dropdown positioning already handled by main search-wrapper */
 
   /* Dropdown results positioning */
   .results-container {

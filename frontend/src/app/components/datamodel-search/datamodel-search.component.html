@@ -13,6 +13,7 @@
       (input)="onSearch($event)" 
       (keydown)="onKeyDown($event)"
       (keyup.enter)="!searchResults[selectedIndex] && searchResults.length > 0 && selectResult(searchResults[0])"
+      (blur)="hideResultsDelayed()"
     />
     <span class="clear-icon" *ngIf="searchTerm" (click)="clearSearch()">&times;</span>
   </div>
