@@ -55,17 +55,17 @@ h1 {
     display: flex;
     flex-direction: column;
     position: fixed;
-    top: 55px; /* Position below the shorter header */
+    top: 65px; /* Position below the header with additional gap */
     left: 50%;
     transform: translateX(-50%); /* Center horizontally */
     width: 50em;
     max-width: 90%; /* Limit width on smaller screens */
     z-index: 900; /* High z-index to stay above the canvas */
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 255, 255, 0.7);
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(2px);
 }
 
 .search {
