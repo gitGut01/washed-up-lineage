@@ -1,6 +1,6 @@
 <div class="info-panel" [class.open]="isOpen" [ngStyle]="{'width.px': panelWidth}">
   <div class="resizer" (mousedown)="onResizeMouseDown($event)"></div>
-  <div class="header">
+  <div class="header" [ngClass]="headerColorClass">
     <div class="title-with-eye">
       <h3 [innerHTML]="objectType"></h3>
       <div class="tooltip">

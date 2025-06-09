@@ -27,6 +27,7 @@ export class DatamodelInfoPanelComponent implements OnInit {
   schema: string = '';
   object: string = '';
   objectType: string = 'unknown';
+  headerColorClass: string = 'unknown-header';
   showToast: boolean = false;
   toastMessage: string = '';
   ingestionData: { ID: string, LoadTime: string, IsSuccess: boolean } | null = null;
@@ -106,16 +107,27 @@ export class DatamodelInfoPanelComponent implements OnInit {
         if (data_result.type === 'StoredProcedure') {
           displayType = 'Stored Procedure';
           iconHtml = '<i class="fas fa-cogs"></i>';
+          this.headerColorClass = 'stored-procedure-header';
         } else if (data_result.type === 'table') {
           displayType = 'Table';
           iconHtml = '<i class="fas fa-table"></i>';
+          this.headerColorClass = 'table-header';
         } else if (data_result.type === 'view') {
+          // For view, check the node_type to determine color
           displayType = 'View';
           iconHtml = '<i class="fas fa-eye"></i>';
+          
+          if (data_result.node_type === 'LEAF') {
+            this.headerColorClass = 'view-leaf-header';
+          } else {
+            // Default to NORMAL for views if not specified as LEAF
+            this.headerColorClass = 'view-normal-header';
+          }
         } else {
           // Unknown types get the question mark
           displayType = data_result.type || 'Unknown';
           iconHtml = '<i class="fas fa-question"></i>';
+          this.headerColorClass = 'unknown-header';
         }
         
         this.objectType = iconHtml + ' ' + displayType;

@@ -55,6 +55,34 @@ $tooltip-bg: #555;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: -20px -20px 0 -20px; /* Negative margin to extend to the edges */
+  padding: 20px; /* Add padding to maintain the spacing */
+  
+  /* Default styling */
+  color: #333;
+  
+  /* Header color classes */
+  &.table-header {
+    background-color: #B4E5A2; /* Green for tables */
+  }
+  
+  &.view-normal-header {
+    background-color: #A6CAEC; /* Blue for normal views */
+  }
+  
+  &.view-leaf-header {
+    background-color: #f3d36c; /* Yellow for leaf views */
+  }
+  
+  &.stored-procedure-header {
+    background-color: #212121; /* Dark for stored procedures */
+    color: white; /* White text for dark background */
+  }
+  
+  &.unknown-header {
+    background-color: #666666; /* Dark grey for unknown types */
+    color: white; /* White text for dark background */
+  }
   
   h3 {
     margin: 0;
