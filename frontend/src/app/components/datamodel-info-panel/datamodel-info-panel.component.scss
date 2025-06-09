@@ -55,7 +55,6 @@ $tooltip-bg: #555;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
   
   h3 {
     margin: 0;
@@ -171,6 +170,69 @@ $tooltip-bg: #555;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+// ID section with pills styling
+.id-section {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2em;
+  user-select: none;
+}
+
+.id-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 16px;
+  background-color: #e0e0e0; // Grey color for ID pill
+  font-weight: 500;
+  font-size: 0.1em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  max-width: fit-content;
+  
+  &:hover {
+    background-color: #d0d0d0;
+  }
+}
+
+.pill {
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 0.1em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+.warehouse-pill {
+  background-color: $blue-darkest;
+  color: white;
+}
+
+.schema-pill {
+  background-color: $blue-dark;
+  color: white;
+}
+
+.object-pill {
+  background-color: $blue-primary;
+  color: white;
+}
+
+.dot-separator {
+  color: $text-color-secondary;
+  font-weight: bold;
+  font-size: 0.1em;
 }
 
 .info-item {
@@ -456,8 +518,7 @@ $tooltip-bg: #555;
   font-family: 'Courier New', Courier, monospace;
   color: #777777;
   font-size: 0.7em;
-  margin-top: -15px;
-  margin-bottom: 15px;
+  margin-top: 0.5em;
   display: flex;
   align-items: center;
 }

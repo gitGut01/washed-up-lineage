@@ -19,6 +19,24 @@
     </div>
     <button class="close-button" (click)="close()">✖</button>
   </div>
+  <!-- ID info section with pills -->
+  <div class="id-section">
+    <div class="id-pill" (click)="copyToClipboard(objectId, 'ID')">
+      <span>ID</span>
+    </div>
+    <div class="dot-separator">:</div>
+    <div class="warehouse-pill pill" *ngIf="warehouse" (click)="copyToClipboard(warehouse, 'Warehouse')">
+      {{ warehouse }}
+    </div>
+    <div class="dot-separator" *ngIf="warehouse && schema">•</div>
+    <div class="schema-pill pill" *ngIf="schema" (click)="copyToClipboard(schema, 'Schema')">
+      {{ schema }}
+    </div>
+    <div class="dot-separator" *ngIf="schema && object">•</div>
+    <div class="object-pill pill" *ngIf="object" (click)="copyToClipboard(object, 'Object')">
+      {{ object }}
+    </div>
+  </div>
   <div class="ingestion-info" *ngIf="ingestionData && ingestionData.LoadTime">
     Updated: {{ formatDate(ingestionData.LoadTime) }}
     <span class="status-icon" [ngClass]="{'success': ingestionData.IsSuccess, 'failure': !ingestionData.IsSuccess}">
@@ -33,63 +51,7 @@
     </span>
   </div>
 
-  <div class="info-details">
-    <!-- ID info box -->
-    <div class="info-label-container">
-      <div class="info-label id-label" (click)="copyToClipboard(objectId, 'ID')">
-        <div class="label-badge">ID</div>
-        <span class="label-text">{{ objectId }}</span>
-        <span class="copy-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </span>
-      </div>
-    </div>
-
-    <!-- Warehouse info box -->
-    <div class="info-label-container" *ngIf="warehouse">
-      <div class="info-label warehouse-label" (click)="copyToClipboard(warehouse, 'Warehouse')">
-        <div class="label-badge">Warehouse</div>
-        <span class="label-text">{{ warehouse }}</span>
-        <span class="copy-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </span>
-      </div>
-    </div>
-
-    <!-- Schema info box -->
-    <div class="info-label-container" *ngIf="schema">
-      <div class="info-label schema-label" (click)="copyToClipboard(schema, 'Schema')">
-        <div class="label-badge">Schema</div>
-        <span class="label-text">{{ schema }}</span>
-        <span class="copy-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </span>
-      </div>
-    </div>
-
-    <!-- Object info box -->
-    <div class="info-label-container" *ngIf="object">
-      <div class="info-label object-label" (click)="copyToClipboard(object, 'Object')">
-        <div class="label-badge">Object</div>
-        <span class="label-text">{{ object }}</span>
-        <span class="copy-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-        </span>
-      </div>
-    </div>
-    
+  <div class="info-details">    
     <!-- Toast notification -->
     <div class="toast" *ngIf="showToast">
       {{ toastMessage }}
