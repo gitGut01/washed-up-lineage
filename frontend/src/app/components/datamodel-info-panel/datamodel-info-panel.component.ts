@@ -84,6 +84,26 @@ export class DatamodelInfoPanelComponent implements OnInit {
     this.dataTests = [];
     this.expandedTestRun = null;
     this.historyItems = [];
+    this.columns = [];
+    this.filteredColumnsCache = [];
+    
+    // Track data loading completion
+    let objectDataLoaded = false;
+    let columnsLoaded = false;
+    let dataTestsLoaded = false;
+    let historyLoaded = false;
+    
+    // Function to check if all data is loaded and select the appropriate tab
+    const checkAllDataLoaded = () => {
+      if (objectDataLoaded && columnsLoaded && dataTestsLoaded && historyLoaded) {
+        // Select the first available tab
+        const firstAvailableTab = this.getFirstAvailableTab();
+        if (firstAvailableTab) {
+          this.activeTab = firstAvailableTab;
+        }
+        this.cdr.markForCheck();
+      }
+    };
     
     this.dataService.getObjectByName(objectId).subscribe(data => {
       // The new API response format has elements as an array
@@ -132,35 +152,82 @@ export class DatamodelInfoPanelComponent implements OnInit {
         
         this.objectType = iconHtml + ' ' + displayType;
         
+        // Mark object data as loaded
+        objectDataLoaded = true;
+        
         // Fetch ingestion data for this object
         this.fetchIngestionData(this.objectId);
-        
-        // Always fetch data tests in the background to update tab status
-        this.fetchDataTests(this.objectId);
-        
-        // Always fetch history data in the background
-        this.fetchHistory(this.objectId);
         
         this.cdr.markForCheck();
       } else {
         console.error('Invalid object data format:', data);
+        objectDataLoaded = true;
       }
+      
+      checkAllDataLoaded();
     });
     
-    this.columns = [];
-    this.filteredColumnsCache = [];
+    // Fetch columns data
+    this.dataService.getColumnsByDataModel(objectId).subscribe(
+      (data) => {
+        this.columns = data.elements.map((column: any) => ({
+          name: column.data.original_name || column.data.name || column.data.id,
+          type: column.data.type || 'null',
+          column_id: column.data.id,
+          is_type_guessed: column.data.is_type_guessed || false,
+          is_type_updated: column.data.is_type_updated || false
+        }));
+        this.updateFilteredColumns();
+        columnsLoaded = true;
+        this.cdr.markForCheck();
+        checkAllDataLoaded();
+      },
+      (error) => {
+        console.error('Error fetching columns:', error);
+        columnsLoaded = true;
+        checkAllDataLoaded();
+      }
+    );
     
-    this.dataService.getColumnsByDataModel(objectId).subscribe(data => {
-      this.columns = data.elements.map((column: any) => ({
-        name: column.data.original_name || column.data.name || column.data.id,
-        type: column.data.type || 'null',
-        column_id: column.data.id,
-        is_type_guessed: column.data.is_type_guessed || false,
-        is_type_updated: column.data.is_type_updated || false
-      }));
-      this.updateFilteredColumns();
-      this.cdr.markForCheck();
-    });
+    // Fetch data tests
+    this.dataService.getHistoricalDataTests(objectId).subscribe(
+      (data) => {
+        this.dataTests = data;
+        // Sort data tests by TestTime (newest first) if needed
+        if (this.dataTests && this.dataTests.length > 1) {
+          this.dataTests.sort((a, b) => new Date(b.TestTime).getTime() - new Date(a.TestTime).getTime());
+        }
+        dataTestsLoaded = true;
+        this.cdr.markForCheck();
+        checkAllDataLoaded();
+      },
+      (error) => {
+        console.error('Error fetching data tests:', error);
+        this.dataTests = [];
+        dataTestsLoaded = true;
+        checkAllDataLoaded();
+      }
+    );
+    
+    // Fetch history data
+    this.dataService.getHistoricalIngestionsById(objectId).subscribe(
+      (data) => {
+        // Transform the ingestion data into the format expected by the UI
+        this.historyItems = data.map((item: any) => ({
+          timestamp: item.LoadTime,
+          type: item.IsSuccess ? 'success' : 'failure'
+        }));
+        historyLoaded = true;
+        this.cdr.markForCheck();
+        checkAllDataLoaded();
+      },
+      (error) => {
+        console.error('Error fetching historical ingestions:', error);
+        this.historyItems = [];
+        historyLoaded = true;
+        checkAllDataLoaded();
+      }
+    );
   }
 
   onColumnClick(column: { name: string, type: string, column_id: string, is_type_guessed: boolean, is_type_updated: boolean }) {
@@ -353,19 +420,48 @@ export class DatamodelInfoPanelComponent implements OnInit {
   }
 
   /**
-   * Set the active tab and fetch data if needed
+   * Check if any tabs have data available
+   */
+  hasAvailableTabs(): boolean {
+    return (this.columns && this.columns.length > 0) || 
+           (this.dataTests && this.dataTests.length > 0) || 
+           (this.historyItems && this.historyItems.length > 0);
+  }
+
+  /**
+   * Find the first available tab with data
+   */
+  getFirstAvailableTab(): string | null {
+    if (this.columns && this.columns.length > 0) return 'columns';
+    if (this.dataTests && this.dataTests.length > 0) return 'data-tests';
+    if (this.historyItems && this.historyItems.length > 0) return 'history';
+    return null;
+  }
+
+  /**
+   * Set the active tab if it has data available
    */
   setActiveTab(tabName: string) {
-    this.activeTab = tabName;
+    // Check if the requested tab has data
+    let tabHasData = false;
     
-    // If switching to data tests tab and we don't have data yet, fetch it
-    if (tabName === 'data-tests' && this.dataTests.length === 0 && this.objectId) {
-      this.fetchDataTests(this.objectId);
+    if (tabName === 'columns' && this.columns && this.columns.length > 0) {
+      tabHasData = true;
+    } else if (tabName === 'data-tests' && this.dataTests && this.dataTests.length > 0) {
+      tabHasData = true;
+    } else if (tabName === 'history' && this.historyItems && this.historyItems.length > 0) {
+      tabHasData = true;
     }
     
-    // If switching to history tab and we don't have data yet, fetch it
-    if (tabName === 'history' && this.historyItems.length === 0 && this.objectId) {
-      this.fetchHistory(this.objectId);
+    // Only set the active tab if it has data
+    if (tabHasData) {
+      this.activeTab = tabName;
+    } else {
+      // Try to select another tab with data
+      const availableTab = this.getFirstAvailableTab();
+      if (availableTab) {
+        this.activeTab = availableTab;
+      }
     }
     
     this.cdr.markForCheck();

@@ -17,25 +17,22 @@ export function defineNodeHtmlNode(cy: cytoscape.Core) {
         // Simplified template for large graphs
         const selectedClass = data.isSelected ? 'selected' : '';
         
-        // Get initial node type (ROOT, NORMAL, LEAF)
         let nodeType = data.node_type || '';
         let displayType = '';
         let iconHtml = '';
     
-        // Check for stored procedures to override the nodeType
         if (data.type === 'StoredProcedure') {
           nodeType = 'stored_procedure';
           displayType = 'SP';
           iconHtml = '<i class="fas fa-cogs"></i>';
         } else if (data.type === 'table') {
-          // Regular types get icons but keep their ROOT/NORMAL/LEAF node type
+          nodeType = 'table';
           displayType = 'TBL';
           iconHtml = '<i class="fas fa-table"></i>';
         } else if (data.type === 'view') {
           displayType = 'VIW';
           iconHtml = '<i class="fas fa-eye"></i>';
         } else {
-          // Unknown types get the question mark
           displayType = 'UNK';
           iconHtml = '<i class="fas fa-question"></i>';
         }

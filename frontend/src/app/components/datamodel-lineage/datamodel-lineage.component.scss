@@ -122,9 +122,6 @@
 }
 
 /* Position-based node colors (ROOT, LEAF, NORMAL, stored_procedure) - brighter colors */
-#cy .ROOT .node-sidebar {
-  background-color: #B4E5A2;
-}
 
 #cy .LEAF .node-sidebar {
   background-color: #f3d36c;
@@ -132,6 +129,10 @@
 
 #cy .NORMAL .node-sidebar {
   background-color: #A6CAEC;
+}
+
+#cy .table .node-sidebar {
+  background-color: #B4E5A2;
 }
 
 /* Special type for stored procedures */

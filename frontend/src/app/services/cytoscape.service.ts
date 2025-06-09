@@ -64,7 +64,7 @@ export class CytoscapeService {
       },
     },
     {
-      selector: 'node[node_type = "ROOT"]',
+      selector: 'node[type = "table"]',
       style: {
         'background-color': '#B4E5A2',
       },
@@ -97,7 +97,7 @@ export class CytoscapeService {
       },
     },
     {
-      selector: 'node[node_type = "ROOT"]:selected',
+      selector: 'node[type = "table"]:selected',
       style: {
         'border-color': 'green',
       },
