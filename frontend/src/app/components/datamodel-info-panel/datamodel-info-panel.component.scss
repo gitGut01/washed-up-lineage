@@ -56,7 +56,10 @@ $tooltip-bg: #555;
   justify-content: space-between;
   align-items: center;
   margin: -20px -20px 0 -20px; /* Negative margin to extend to the edges */
-  padding: 20px; /* Add padding to maintain the spacing */
+  padding: 20px;
+  padding-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  user-select: none;
   
   /* Default styling */
   color: #333;
@@ -64,14 +67,17 @@ $tooltip-bg: #555;
   /* Header color classes */
   &.table-header {
     background-color: #B4E5A2; /* Green for tables */
+    color: white;
   }
   
   &.view-normal-header {
     background-color: #A6CAEC; /* Blue for normal views */
+    color: white;
   }
   
   &.view-leaf-header {
     background-color: #f3d36c; /* Yellow for leaf views */
+    color: white;
   }
   
   &.stored-procedure-header {
@@ -207,6 +213,7 @@ $tooltip-bg: #555;
   align-items: center;
   gap: 0.2em;
   user-select: none;
+  margin-top: 0.5em;
 }
 
 .id-pill {
