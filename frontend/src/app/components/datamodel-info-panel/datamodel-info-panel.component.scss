@@ -646,7 +646,7 @@ $tooltip-bg: #555;
       }
       
       &:hover {
-        filter: brightness(0.97);
+        filter: brightness(0.7);
       }
       
       .test-time {
@@ -837,7 +837,6 @@ $tooltip-bg: #555;
     border-radius: 4px;
     margin-bottom: 10px;
     border-left: 4px solid transparent;
-    cursor: pointer;
     
     &.latest-item {
       .history-timestamp {
@@ -881,9 +880,9 @@ $tooltip-bg: #555;
       }
     }
     
-    &:hover {
-      filter: brightness(0.98);
-    }
+    //&:hover {
+    //  filter: brightness(0.8);
+    //}
   }
 }
 

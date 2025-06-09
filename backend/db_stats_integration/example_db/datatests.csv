@@ -30,3 +30,9 @@ MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;IsNotNull;false;sennep_id;2023-12-14T10:05:1
 MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;IsUnique;false;sennep_id;2023-12-14T10:05:18;0.39;;true
 MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;HasValue;false;expiry_date;2023-12-14T10:05:18;0.39;Column 'expiry_date' contains 5 NULL values;false
 MY_WAREHOUSE.DBO.GET_BERGBYS_SENNEP;RowCountMatch;true;;2023-12-14T10:05:18;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;IsNotNull;false;egg_id;2021-11-18T11:00:00;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;IsUnique;false;egg_id;2021-11-18T11:00:00;0.39;Duplicate values found in 'egg_id' column;false
+MY_WAREHOUSE.DBO.GET_EGGS;HasValue;false;egg_size;2021-11-18T11:00:00;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2021-11-18T00:00:00;0.39;;true
+MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2021-10-18T00:00:00;0.39;Not good;true
+MY_WAREHOUSE.DBO.GET_EGGS;RowCountMatch;true;;2021-09-18T00:00:00;0.39;OH no;false
