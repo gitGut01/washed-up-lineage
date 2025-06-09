@@ -24,7 +24,7 @@ export function defineNodeHtmlNode(cy: cytoscape.Core) {
         if (data.type === 'StoredProcedure') {
           nodeType = 'stored_procedure';
           displayType = 'SP';
-          iconHtml = '<i class="fas fa-cogs"></i>';
+          iconHtml = '<i class="fas fa-cog"></i>';
         } else if (data.type === 'table') {
           nodeType = 'table';
           displayType = 'TBL';

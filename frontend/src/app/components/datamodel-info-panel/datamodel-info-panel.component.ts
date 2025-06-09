@@ -126,7 +126,7 @@ export class DatamodelInfoPanelComponent implements OnInit {
         // Check for stored procedures to override the nodeType
         if (data_result.type === 'StoredProcedure') {
           displayType = 'Stored Procedure';
-          iconHtml = '<i class="fas fa-cogs"></i>';
+          iconHtml = '<i class="fas fa-cog"></i>';
           this.headerColorClass = 'stored-procedure-header';
         } else if (data_result.type === 'table') {
           displayType = 'Table';
