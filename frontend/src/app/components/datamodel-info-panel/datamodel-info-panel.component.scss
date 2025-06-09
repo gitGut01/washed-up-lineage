@@ -548,6 +548,7 @@ $tooltip-bg: #555;
   align-items: center;
   gap: 6px;
   font-size: 0.85em;
+  user-select: none;
   
   svg {
     width: 14px;
