@@ -19,7 +19,7 @@
     </div>
     <button class="close-button" (click)="close()">✖</button>
   </div>
-  <div class="ingestion-info" *ngIf="ingestionData">
+  <div class="ingestion-info" *ngIf="ingestionData && ingestionData.LoadTime">
     Updated: {{ formatDate(ingestionData.LoadTime) }}
     <span class="status-icon" [ngClass]="{'success': ingestionData.IsSuccess, 'failure': !ingestionData.IsSuccess}">
       <!-- Success icon: checkmark in circle -->
