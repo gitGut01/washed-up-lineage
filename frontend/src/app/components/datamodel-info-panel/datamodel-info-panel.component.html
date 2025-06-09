@@ -146,7 +146,7 @@
         <div *ngIf="dataTests && dataTests.length > 0" class="data-tests-list">
           <ul>
             <li *ngFor="let testRun of dataTests" class="test-run-item">
-              <div class="test-run-header" (click)="toggleTestRun(testRun.TestTime)">
+              <div class="test-run-header" [ngClass]="{'success-text': testRun.IsSuccess, 'failure-text': !testRun.IsSuccess}" (click)="toggleTestRun(testRun.TestTime)">
                 <span class="test-time">{{ formatDate(testRun.TestTime) }}</span>
                 <span class="test-status-indicator" [ngClass]="{'success': testRun.IsSuccess, 'failure': !testRun.IsSuccess}">
                   <svg *ngIf="testRun.IsSuccess" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">

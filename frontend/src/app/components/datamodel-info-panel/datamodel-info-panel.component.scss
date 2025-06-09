@@ -554,10 +554,19 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      border-left: 4px solid #ddd;
+      
+      &.success-text {
+        background-color: rgba(40, 167, 69, 0.1); // Muted green background
+        border-left: 4px solid #28a745;
+      }
+      
+      &.failure-text {
+        background-color: rgba(220, 53, 69, 0.1); // Muted red background
+        border-left: 4px solid #dc3545;
+      }
       
       &:hover {
-        background-color: #f0f0f0;
+        filter: brightness(0.97);
       }
       
       .test-time {
