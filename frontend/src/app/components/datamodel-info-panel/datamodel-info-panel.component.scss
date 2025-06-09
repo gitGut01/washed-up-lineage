@@ -542,50 +542,115 @@
     margin: 0;
   }
   
-  .data-test-item {
-    padding: 12px;
-    border-radius: 4px;
+  .test-run-item {
     margin-bottom: 10px;
     background-color: #f5f5f5;
-    border-left: 4px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
     
-    .test-header {
+    .test-run-header {
+      padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
+      cursor: pointer;
+      border-left: 4px solid #ddd;
       
-      .test-name {
-        font-weight: 600;
-        font-size: 1em;
+      &:hover {
+        background-color: #f0f0f0;
       }
       
-      .test-status {
-        font-size: 0.8em;
-        padding: 3px 8px;
-        border-radius: 12px;
-        text-transform: uppercase;
+      .test-time {
         font-weight: 600;
+        font-size: 0.9em;
+        flex-grow: 1;
+      }
+      
+      .test-status-indicator {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
         
-        &.passed {
-          background-color: rgba(40, 167, 69, 0.15);
+        &.success {
           color: #28a745;
         }
         
-        &.failed {
-          background-color: rgba(220, 53, 69, 0.15);
+        &.failure {
           color: #dc3545;
         }
       }
+      
+      .expand-icon {
+        font-size: 0.8em;
+        color: #666;
+      }
     }
     
-    .test-description {
-      font-size: 0.9em;
-      color: #666;
-    }
-    
-    &:hover {
-      background-color: #f0f0f0;
+    .test-details {
+      padding: 0 12px 12px 16px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #ddd;
+      
+      .individual-test {
+        padding: 8px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #eee;
+        
+        &:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+        }
+        
+        .test-header {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 4px;
+          
+          .test-name {
+            font-weight: 600;
+            font-size: 0.9em;
+          }
+          
+          .test-column {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #e0e0e0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+          }
+          
+          .test-status {
+            font-size: 0.8em;
+            padding: 2px 6px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-left: auto;
+            
+            &.success {
+              background-color: rgba(40, 167, 69, 0.15);
+              color: #28a745;
+            }
+            
+            &.failure {
+              background-color: rgba(220, 53, 69, 0.15);
+              color: #dc3545;
+            }
+          }
+        }
+        
+        .test-error {
+          font-size: 0.85em;
+          color: #dc3545;
+          margin-top: 4px;
+          padding: 4px 8px;
+          background-color: rgba(220, 53, 69, 0.05);
+          border-radius: 3px;
+          font-family: 'Courier New', Courier, monospace;
+        }
+      }
     }
   }
 }

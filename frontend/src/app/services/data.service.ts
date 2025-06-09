@@ -307,10 +307,14 @@ export class DataService {
     return finalElements;
   }
   
-  // Clear a specific cache entry
+  /**
+   * Clears a specific cache entry by key
+   * @param key The key of the cache entry to clear
+   */
   clearCache(key: string): void {
     if (this.cache[key]) {
       delete this.cache[key];
+      console.log(`Cache cleared for key: ${key}`);
     }
   }
   
@@ -331,5 +335,20 @@ export class DataService {
     }
     return this.cache[cacheKey];
   }
+
+  /**
+   * Get historical data tests for a specific object by ID
+   */
+  getHistoricalDataTests(id: string): Observable<any> {
+    const cacheKey = `datatests_${id}`;
+    if (!this.cache[cacheKey]) {
+      const url = `${this.baseUrl}/datatests/historical/${id}`;
+      this.cache[cacheKey] = this.http.get<any>(url)
+        .pipe(shareReplay(1));
+    }
+    return this.cache[cacheKey];
+  }
+  
+
 
 }

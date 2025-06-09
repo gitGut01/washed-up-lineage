@@ -7,7 +7,6 @@ DATATESTS_PATH = "db_stats_integration/example_db/datatests.csv"
 def _read_datatests_csv(file_path:str=DATATESTS_PATH) -> pd.DataFrame:
     df = pd.read_csv(file_path, sep=';')
     df['TestTime'] = pd.to_datetime(df['TestTime'])
-    df['IsSuccess'] = df['IsSuccess'].map({'true': True, 'false': False})
     return df
 
 
@@ -36,23 +35,25 @@ def get_historical_tests(target_id: str, file_path:str=DATATESTS_PATH) -> List[D
             
             test_info = {
                 "TestName": row['DataTestName'],
-                "IsGlobal": True if row['IsGlobal'] == 'true' else False,
+                "IsGlobal": row['IsGlobal'],
                 "ColumnName": column_name,
                 "ErrorMessage": error_message,
-                "IsSuccess": True if row['IsSuccess'] == 'true' else False
+                "IsSuccess": row['IsSuccess']
             }
             tests.append(test_info)
+        
+        tests.sort(key=lambda test: (not test["IsGlobal"], test["TestName"], test["ColumnName"]))
+        all_tests_successful = all(test["IsSuccess"] for test in tests)
         
         entry = {
             "ID": target_id,
             "TestTime": test_time,
+            "IsSuccess": all_tests_successful,
             "DataTests": tests
         }
         
         result.append(entry)
     
-    # Sort by TestTime in descending order (newest first)
     result.sort(key=lambda x: x['TestTime'], reverse=True)
     
     return result
-

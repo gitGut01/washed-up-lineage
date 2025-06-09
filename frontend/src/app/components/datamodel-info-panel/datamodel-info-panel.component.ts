@@ -36,7 +36,8 @@ export class DatamodelInfoPanelComponent implements OnInit {
   searchQuery: string = '';
   panelWidth: number = 300;
   activeTab: string = 'columns';
-  dataTests: { name: string, description: string, status: string }[] = [];
+  dataTests: any[] = [];
+  expandedTestRun: string | null = null;
   historyItems: { timestamp: string, type: string, user: string, description: string }[] = [];
   
   // Computed property to determine if we're in the object lineage view
@@ -77,6 +78,11 @@ export class DatamodelInfoPanelComponent implements OnInit {
   }
 
   fetchDatamodelData(objectId: string) {
+    // Clear previous data
+    this.dataTests = [];
+    this.expandedTestRun = null;
+    this.historyItems = [];
+    
     this.dataService.getObjectByName(objectId).subscribe(data => {
       // The new API response format has elements as an array
       if (data && data.elements && Array.isArray(data.elements) && data.elements.length > 0) {
@@ -92,6 +98,11 @@ export class DatamodelInfoPanelComponent implements OnInit {
         
         // Fetch ingestion data for this object
         this.fetchIngestionData(this.objectId);
+        
+        // If the data tests tab is active, fetch the data tests
+        if (this.activeTab === 'data-tests') {
+          this.fetchDataTests(this.objectId);
+        }
         
         this.cdr.markForCheck();
       } else {
@@ -275,8 +286,11 @@ export class DatamodelInfoPanelComponent implements OnInit {
   setActiveTab(tabName: string) {
     this.activeTab = tabName;
     
-    // If switching to data tests tab and we don't have data yet, fetch it
-    if (tabName === 'data-tests' && this.dataTests.length === 0 && this.objectId) {
+    // If switching to data tests tab, always fetch fresh data
+    if (tabName === 'data-tests' && this.objectId) {
+      // Clear cache for this specific data test to ensure fresh data
+      this.dataService.clearCache(`datatests_${this.objectId}`);
+      this.dataTests = []; // Clear existing data
       this.fetchDataTests(this.objectId);
     }
     
@@ -290,14 +304,9 @@ export class DatamodelInfoPanelComponent implements OnInit {
 
   /**
    * Fetch data tests for the current object
-   * Note: This is a placeholder method. You'll need to implement the actual API call
-   * in the DataService when that functionality is available.
    */
   fetchDataTests(objectId: string) {
-    // This is a placeholder for future implementation
-    // When the API is available, uncomment and implement:
-    /*
-    this.dataService.getDataTestsById(objectId).subscribe(
+    this.dataService.getHistoricalDataTests(objectId).subscribe(
       (data) => {
         this.dataTests = data;
         this.cdr.markForCheck();
@@ -308,29 +317,18 @@ export class DatamodelInfoPanelComponent implements OnInit {
         this.cdr.markForCheck();
       }
     );
-    */
-    
-    // For now, just set some sample data to demonstrate the UI
-    setTimeout(() => {
-      this.dataTests = [
-        { 
-          name: 'Not Null Check', 
-          description: 'Ensures all required fields have values', 
-          status: 'passed' 
-        },
-        { 
-          name: 'Data Type Validation', 
-          description: 'Validates that data types match schema definitions', 
-          status: 'passed' 
-        },
-        { 
-          name: 'Uniqueness Check', 
-          description: 'Verifies primary key columns contain unique values', 
-          status: 'failed' 
-        }
-      ];
-      this.cdr.markForCheck();
-    }, 500);
+  }
+  
+  /**
+   * Toggle the expanded state of a test run
+   */
+  toggleTestRun(testTime: string) {
+    if (this.expandedTestRun === testTime) {
+      this.expandedTestRun = null; // Collapse if already expanded
+    } else {
+      this.expandedTestRun = testTime; // Expand this test run
+    }
+    this.cdr.markForCheck();
   }
   
   /**

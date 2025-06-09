@@ -145,14 +145,33 @@
       <div *ngIf="activeTab === 'data-tests'" class="tab-pane">
         <div *ngIf="dataTests && dataTests.length > 0" class="data-tests-list">
           <ul>
-            <li *ngFor="let test of dataTests" class="data-test-item">
-              <div class="test-header">
-                <span class="test-name">{{ test.name }}</span>
-                <span class="test-status" [ngClass]="{'passed': test.status === 'passed', 'failed': test.status === 'failed'}">
-                  {{ test.status }}
+            <li *ngFor="let testRun of dataTests" class="test-run-item">
+              <div class="test-run-header" (click)="toggleTestRun(testRun.TestTime)">
+                <span class="test-time">{{ formatDate(testRun.TestTime) }}</span>
+                <span class="test-status-indicator" [ngClass]="{'success': testRun.IsSuccess, 'failure': !testRun.IsSuccess}">
+                  <svg *ngIf="testRun.IsSuccess" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <svg *ngIf="!testRun.IsSuccess" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/>
+                  </svg>
                 </span>
+                <span class="expand-icon">{{ expandedTestRun === testRun.TestTime ? '▼' : '▶' }}</span>
               </div>
-              <div class="test-description">{{ test.description }}</div>
+              <div class="test-details" *ngIf="expandedTestRun === testRun.TestTime">
+                <div *ngFor="let test of testRun.DataTests" class="individual-test">
+                  <div class="test-header">
+                    <span class="test-name">{{ test.TestName }}</span>
+                    <span *ngIf="test.ColumnName" class="test-column">{{ test.ColumnName }}</span>
+                    <span class="test-status" [ngClass]="{'success': test.IsSuccess, 'failure': !test.IsSuccess}">
+                      {{ test.IsSuccess ? 'Passed' : 'Failed' }}
+                    </span>
+                  </div>
+                  <div *ngIf="test.ErrorMessage" class="test-error">
+                    {{ test.ErrorMessage }}
+                  </div>
+                </div>
+              </div>
             </li>
           </ul>
         </div>

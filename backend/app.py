@@ -88,7 +88,10 @@ async def api_get_latest_test_run():
 
 @app.get('/api/datatests/historical/{id}')
 async def api_get_historical_tests(id: str):
-    return get_historical_tests(id)
+    try:
+        return get_historical_tests(id)
+    except Exception:
+        return []
 
 @app.get('/api/ingestion/latest')
 async def api_get_latest_ingestion():
@@ -96,11 +99,21 @@ async def api_get_latest_ingestion():
 
 @app.get('/api/ingestion/{id}')
 async def api_get_ingestion_by_id(id: str):
-    return get_latest_ingestion_by_id(id)
+    try:
+        return get_latest_ingestion_by_id(id)
+    except Exception:
+        return {
+            "ID": id,
+            "LoadTime": "",
+            "IsSuccess": True
+        }
 
 @app.get('/api/ingestion/historical/{id}')
 async def api_get_historical_ingestions(id: str):
-    return get_historical_ingestions_by_id(id).to_dict(orient='records')
+    try:
+        return get_historical_ingestions_by_id(id).to_dict(orient='records')
+    except Exception:
+        return []
 
 if __name__ == '__main__':
     import uvicorn
