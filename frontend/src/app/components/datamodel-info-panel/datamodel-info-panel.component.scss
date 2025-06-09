@@ -617,6 +617,61 @@
           gap: 8px;
           margin-bottom: 4px;
           
+          .test-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 3px; // Reduced margin to make it closer
+            
+            &.global-icon {
+              color: #aaaaaa; // Light gray color for global tests
+            }
+            
+            svg {
+              vertical-align: middle;
+            }
+          }
+          
+          .tooltip-container {
+            position: relative;
+            display: inline-block;
+            
+            &:hover .tooltip-text {
+              visibility: visible;
+              opacity: 1;
+            }
+            
+            .tooltip-text {
+              visibility: hidden;
+              width: 100px;
+              background-color: #555;
+              color: #fff;
+              text-align: center;
+              padding: 5px;
+              border-radius: 4px;
+              position: absolute;
+              z-index: 1;
+              bottom: 125%;
+              left: 50%;
+              margin-left: -50px;
+              opacity: 0;
+              transition: opacity 0.3s;
+              font-size: 0.8em;
+              font-weight: normal;
+              
+              &::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+              }
+            }
+          }
+          
           .test-name {
             font-weight: 600;
             font-size: 0.9em;
