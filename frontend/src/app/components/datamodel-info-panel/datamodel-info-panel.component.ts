@@ -99,10 +99,8 @@ export class DatamodelInfoPanelComponent implements OnInit {
         // Fetch ingestion data for this object
         this.fetchIngestionData(this.objectId);
         
-        // If the data tests tab is active, fetch the data tests
-        if (this.activeTab === 'data-tests') {
-          this.fetchDataTests(this.objectId);
-        }
+        // Always fetch data tests in the background to update tab status
+        this.fetchDataTests(this.objectId);
         
         this.cdr.markForCheck();
       } else {
@@ -291,6 +289,19 @@ export class DatamodelInfoPanelComponent implements OnInit {
     if (!tests || !Array.isArray(tests)) return 0;
     return tests.filter(test => test.IsSuccess).length;
   }
+  
+  /**
+   * Check if the latest data test run has failed
+   */
+  hasLatestTestFailed(): boolean {
+    if (!this.dataTests || this.dataTests.length === 0) return false;
+    
+    // The data tests are assumed to be sorted by TestTime (newest first)
+    // If not, we would need to sort them: this.dataTests.sort((a, b) => new Date(b.TestTime).getTime() - new Date(a.TestTime).getTime());
+    
+    // Check if the first (latest) test run has IsSuccess = false
+    return !this.dataTests[0].IsSuccess;
+  }
 
   /**
    * Set the active tab and fetch data if needed
@@ -298,11 +309,8 @@ export class DatamodelInfoPanelComponent implements OnInit {
   setActiveTab(tabName: string) {
     this.activeTab = tabName;
     
-    // If switching to data tests tab, always fetch fresh data
-    if (tabName === 'data-tests' && this.objectId) {
-      // Clear cache for this specific data test to ensure fresh data
-      this.dataService.clearCache(`datatests_${this.objectId}`);
-      this.dataTests = []; // Clear existing data
+    // If switching to data tests tab and we don't have data yet, fetch it
+    if (tabName === 'data-tests' && this.dataTests.length === 0 && this.objectId) {
       this.fetchDataTests(this.objectId);
     }
     
@@ -321,6 +329,10 @@ export class DatamodelInfoPanelComponent implements OnInit {
     this.dataService.getHistoricalDataTests(objectId).subscribe(
       (data) => {
         this.dataTests = data;
+        // Sort data tests by TestTime (newest first) if needed
+        if (this.dataTests && this.dataTests.length > 1) {
+          this.dataTests.sort((a, b) => new Date(b.TestTime).getTime() - new Date(a.TestTime).getTime());
+        }
         this.cdr.markForCheck();
       },
       (error) => {

@@ -109,6 +109,30 @@
       height: 22px;
     }
   }
+  
+  .tab {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    gap: 8px;
+    
+    &.active {
+      border-bottom: 2px solid #007bff;
+      color: #007bff;
+      
+      svg {
+        stroke: #007bff;
+      }
+    }
+    
+    &.failed-test-tab {
+      background-color: rgba(220, 53, 69, 0.1); // Muted red background
+      border-left: 3px solid #dc3545;
+    }
+  }
 }
 
 .info-details {
@@ -511,6 +535,15 @@
   &.active {
     border-bottom: 2px solid #007bff;
     color: #007bff;
+  }
+  
+  &.failed-test-tab {
+    background-color: rgba(220, 53, 69, 0.1); // Muted red background
+    border-left: 3px solid #dc3545;
+    
+    &:hover {
+      background-color: rgba(220, 53, 69, 0.15); // Slightly darker on hover
+    }
   }
 }
 
