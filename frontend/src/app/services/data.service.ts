@@ -348,7 +348,18 @@ export class DataService {
     }
     return this.cache[cacheKey];
   }
-  
 
+  /**
+   * Get historical ingestion data for a specific object by ID
+   */
+  getHistoricalIngestionsById(id: string): Observable<any> {
+    const cacheKey = `historical_ingestion_${id}`;
+    if (!this.cache[cacheKey]) {
+      const url = `${this.ingestionUrl}/historical/${id}`;
+      this.cache[cacheKey] = this.http.get<any>(url)
+        .pipe(shareReplay(1));
+    }
+    return this.cache[cacheKey];
+  }
 
 }

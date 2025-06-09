@@ -356,50 +356,23 @@ export class DatamodelInfoPanelComponent implements OnInit {
   }
   
   /**
-   * Fetch history data for the current object
-   * Note: This is a placeholder method. You'll need to implement the actual API call
-   * in the DataService when that functionality is available.
+   * Fetch historical ingestion data for the current object
    */
   fetchHistory(objectId: string) {
-    // This is a placeholder for future implementation
-    // When the API is available, uncomment and implement:
-    /*
-    this.dataService.getHistoryById(objectId).subscribe(
+    this.dataService.getHistoricalIngestionsById(objectId).subscribe(
       (data) => {
-        this.historyItems = data;
+        // Transform the ingestion data into the format expected by the UI
+        this.historyItems = data.map((item: any) => ({
+          timestamp: item.LoadTime,
+          type: item.IsSuccess ? 'success' : 'failure'
+        }));
         this.cdr.markForCheck();
       },
       (error) => {
-        console.error('Error fetching history:', error);
+        console.error('Error fetching historical ingestions:', error);
         this.historyItems = [];
         this.cdr.markForCheck();
       }
     );
-    */
-    
-    // For now, just set some sample data to demonstrate the UI
-    setTimeout(() => {
-      this.historyItems = [
-        { 
-          timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-          type: 'update',
-          user: 'john.doe@example.com',
-          description: 'Updated column types for better compatibility' 
-        },
-        { 
-          timestamp: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-          type: 'schema',
-          user: 'jane.smith@example.com',
-          description: 'Added new columns for customer segmentation' 
-        },
-        { 
-          timestamp: new Date(Date.now() - 604800000).toISOString(), // 7 days ago
-          type: 'create',
-          user: 'admin@example.com',
-          description: 'Initial table creation' 
-        }
-      ];
-      this.cdr.markForCheck();
-    }, 500);
   }
 }
