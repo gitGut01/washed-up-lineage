@@ -286,6 +286,11 @@ export class DatamodelInfoPanelComponent implements OnInit {
       return dateString;
     }
   }
+  
+  getSuccessfulTestCount(tests: any[]): number {
+    if (!tests || !Array.isArray(tests)) return 0;
+    return tests.filter(test => test.IsSuccess).length;
+  }
 
   /**
    * Set the active tab and fetch data if needed

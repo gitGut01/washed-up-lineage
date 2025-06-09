@@ -148,6 +148,9 @@
             <li *ngFor="let testRun of dataTests" class="test-run-item">
               <div class="test-run-header" [ngClass]="{'success-text': testRun.IsSuccess, 'failure-text': !testRun.IsSuccess}" (click)="toggleTestRun(testRun.TestTime)">
                 <span class="test-time">{{ formatDate(testRun.TestTime) }}</span>
+                <span class="test-counter" [ngClass]="{'success': testRun.IsSuccess, 'failure': !testRun.IsSuccess}">
+                  [{{ getSuccessfulTestCount(testRun.DataTests) }}/{{ testRun.DataTests.length }}]
+                </span>
                 <span class="test-status-indicator" [ngClass]="{'success': testRun.IsSuccess, 'failure': !testRun.IsSuccess}">
                   <svg *ngIf="testRun.IsSuccess" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>

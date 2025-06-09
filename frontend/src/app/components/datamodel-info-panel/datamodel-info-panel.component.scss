@@ -572,7 +572,23 @@
       .test-time {
         font-weight: 600;
         font-size: 0.9em;
+        flex-grow: 0;
+        margin-right: 8px;
+      }
+      
+      .test-counter {
+        font-size: 0.85em;
+        margin-right: 10px;
+        font-weight: 500;
         flex-grow: 1;
+        
+        &.success {
+          color: #28a745;
+        }
+        
+        &.failure {
+          color: #dc3545;
+        }
       }
       
       .test-status-indicator {
