@@ -94,10 +94,16 @@ $tooltip-bg: #555;
     margin: 0;
   }
   
-  .title-with-eye {
+  .title-container {
     display: flex;
     align-items: center;
-    gap: 4px;
+  }
+  
+  .header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.7em;
   }
   
   /* Tooltip container */
@@ -147,29 +153,37 @@ $tooltip-bg: #555;
     opacity: 1;
   }
   
-  .eye-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
+  .lineage-button {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 6px 10px;
     color: $text-color-secondary;
-    transition: color 0.2s, transform 0.2s;
+    transition: all 0.2s ease;
+    font-size: 0.85em;
     
     &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
       color: $blue-primary;
-      transform: scale(1.1);
     }
     
     &.toggled {
+      background-color: rgba($blue-dark, 0.2);
+      border-color: $blue-dark;
       color: $blue-dark;
     }
     
     svg {
-      width: 22px;
-      height: 22px;
+      width: 18px;
+      height: 18px;
+    }
+    
+    span {
+      font-weight: 500;
     }
   }
   
