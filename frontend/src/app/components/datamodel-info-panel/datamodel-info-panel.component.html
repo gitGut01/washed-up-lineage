@@ -2,7 +2,7 @@
   <div class="resizer" (mousedown)="onResizeMouseDown($event)"></div>
   <div class="header">
     <div class="title-with-eye">
-      <h3>Datamodel Info</h3>
+      <h3 [innerHTML]="objectType"></h3>
       <div class="tooltip">
         <button class="eye-button" [class.toggled]="lineageToggle" (click)="showLineage()">
           <svg *ngIf="!lineageToggle" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

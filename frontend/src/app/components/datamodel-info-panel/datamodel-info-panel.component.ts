@@ -26,6 +26,7 @@ export class DatamodelInfoPanelComponent implements OnInit {
   warehouse: string = '';
   schema: string = '';
   object: string = '';
+  objectType: string = 'unknown';
   showToast: boolean = false;
   toastMessage: string = '';
   ingestionData: { ID: string, LoadTime: string, IsSuccess: boolean } | null = null;
@@ -95,6 +96,29 @@ export class DatamodelInfoPanelComponent implements OnInit {
         this.warehouse = data_result.warehouse || '';
         this.schema = data_result.schema || '';
         this.object = data_result.object || '';
+        
+
+        // Extract object type and add appropriate icon
+        let displayType = '';
+        let iconHtml = '';
+        
+        // Check for stored procedures to override the nodeType
+        if (data_result.type === 'StoredProcedure') {
+          displayType = 'Stored Procedure';
+          iconHtml = '<i class="fas fa-cogs"></i>';
+        } else if (data_result.type === 'table') {
+          displayType = 'Table';
+          iconHtml = '<i class="fas fa-table"></i>';
+        } else if (data_result.type === 'view') {
+          displayType = 'View';
+          iconHtml = '<i class="fas fa-eye"></i>';
+        } else {
+          // Unknown types get the question mark
+          displayType = data_result.type || 'Unknown';
+          iconHtml = '<i class="fas fa-question"></i>';
+        }
+        
+        this.objectType = iconHtml + ' ' + displayType;
         
         // Fetch ingestion data for this object
         this.fetchIngestionData(this.objectId);

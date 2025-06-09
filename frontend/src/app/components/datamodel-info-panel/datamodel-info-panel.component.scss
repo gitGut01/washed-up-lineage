@@ -235,6 +235,28 @@ $tooltip-bg: #555;
   font-size: 0.1em;
 }
 
+.type-section {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  width: 100%;
+  font-size: 0.1em;
+  
+  .type-label {
+    font-weight: 500;
+    color: $text-color-secondary;
+    margin-right: 5px;
+  }
+  
+  .type-value {
+    background-color: $blue-light;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+}
+
 .info-item {
   display: flex;
   justify-content: space-between;
