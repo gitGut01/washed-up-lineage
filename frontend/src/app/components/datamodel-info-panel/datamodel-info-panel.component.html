@@ -107,7 +107,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
         <span>Data Tests</span>
       </div>
-      <div class="tab" [class.active]="activeTab === 'history'" (click)="setActiveTab('history')">
+      <div class="tab" [class.active]="activeTab === 'history'" [class.failed-test-tab]="hasLatestHistoryFailed()" (click)="setActiveTab('history')">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"></path>
           <path d="M12 8v4l3 3"></path>
@@ -145,7 +145,7 @@
       <div *ngIf="activeTab === 'data-tests'" class="tab-pane">
         <div *ngIf="dataTests && dataTests.length > 0" class="data-tests-list">
           <ul>
-            <li *ngFor="let testRun of dataTests" class="test-run-item">
+            <li *ngFor="let testRun of dataTests; let i = index" class="test-run-item" [ngClass]="{'latest-item': i === 0}">
               <div class="test-run-header" [ngClass]="{'success-text': testRun.IsSuccess, 'failure-text': !testRun.IsSuccess}" (click)="toggleTestRun(testRun.TestTime)">
                 <span class="test-time">{{ formatDate(testRun.TestTime) }}</span>
                 <span class="test-counter" [ngClass]="{'success': testRun.IsSuccess, 'failure': !testRun.IsSuccess}">
@@ -198,7 +198,7 @@
       <div *ngIf="activeTab === 'history'" class="tab-pane">
         <div *ngIf="historyItems && historyItems.length > 0" class="history-list">
           <ul>
-            <li *ngFor="let item of historyItems" class="history-item" [ngClass]="{'success-bg': item.type === 'success', 'failure-bg': item.type === 'failure'}">
+            <li *ngFor="let item of historyItems; let i = index" class="history-item" [ngClass]="{'success-bg': item.type === 'success', 'failure-bg': item.type === 'failure', 'latest-item': i === 0}">
               <div class="history-header">
                 <span class="history-timestamp">{{ formatDate(item.timestamp) }}</span>
                 <span class="status-indicator" [ngClass]="{'success': item.type === 'success', 'failure': item.type === 'failure'}">

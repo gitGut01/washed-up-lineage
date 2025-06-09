@@ -581,13 +581,29 @@
     border-radius: 4px;
     overflow: hidden;
     
+    &.latest-item {
+      .test-run-header {
+        .test-time {
+          font-weight: bold;
+        }
+      }
+    }
+    
+    &:not(.latest-item) {
+      .test-run-header {
+        .test-time {
+          font-weight: normal;
+        }
+      }
+    }
+    
     .test-run-header {
       padding: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      user-select: none; // Prevent text selection
+      user-select: none;
       
       &.success-text {
         background-color: rgba(40, 167, 69, 0.1); // Muted green background
@@ -608,6 +624,7 @@
         font-size: 0.9em;
         flex-grow: 0;
         margin-right: 8px;
+        color: #555;
       }
       
       .test-counter {
@@ -791,6 +808,12 @@
     margin-bottom: 10px;
     border-left: 4px solid transparent;
     cursor: pointer;
+    
+    &.latest-item {
+      .history-timestamp {
+        font-weight: bold;
+      }
+    }
     
     // Success/failure background and border styling
     &.success-bg {

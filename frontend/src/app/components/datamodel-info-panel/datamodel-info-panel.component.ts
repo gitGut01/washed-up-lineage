@@ -102,6 +102,9 @@ export class DatamodelInfoPanelComponent implements OnInit {
         // Always fetch data tests in the background to update tab status
         this.fetchDataTests(this.objectId);
         
+        // Always fetch history data in the background
+        this.fetchHistory(this.objectId);
+        
         this.cdr.markForCheck();
       } else {
         console.error('Invalid object data format:', data);
@@ -301,6 +304,16 @@ export class DatamodelInfoPanelComponent implements OnInit {
     
     // Check if the first (latest) test run has IsSuccess = false
     return !this.dataTests[0].IsSuccess;
+  }
+  
+  /**
+   * Check if the latest history item has failed
+   */
+  hasLatestHistoryFailed(): boolean {
+    if (!this.historyItems || this.historyItems.length === 0) return false;
+    
+    // Check if the first (latest) history item has type = 'failure'
+    return this.historyItems[0].type === 'failure';
   }
 
   /**
