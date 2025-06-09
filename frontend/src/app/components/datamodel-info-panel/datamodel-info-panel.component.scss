@@ -554,6 +554,7 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
+      user-select: none; // Prevent text selection
       
       &.success-text {
         background-color: rgba(40, 167, 69, 0.1); // Muted green background
@@ -595,6 +596,8 @@
         display: flex;
         align-items: center;
         margin-right: 10px;
+        width: 24px; // Fixed width to prevent jumping
+        justify-content: center; // Center the icon in the fixed width
         
         &.success {
           color: #28a745;
@@ -608,6 +611,9 @@
       .expand-icon {
         font-size: 0.8em;
         color: #666;
+        width: 16px;
+        text-align: center;
+        display: inline-block;
       }
     }
     
