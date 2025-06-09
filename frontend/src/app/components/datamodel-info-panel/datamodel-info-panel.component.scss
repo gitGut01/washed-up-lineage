@@ -1,10 +1,40 @@
+// Color Variables
+$background-color: #f9f9f9;
+$border-color: #ddd;
+$text-color-primary: #333;
+$text-color-secondary: #555;
+$text-color-tertiary: #777;
+
+// Blue Palette
+$blue-primary: #007bff;
+$blue-dark: #0056b3;
+$blue-darkest: #0d47a1;
+$blue-dark-medium: #1565c0;
+$blue-medium: #0288d1;
+$blue-light: #29b6f6;
+$blue-tooltip: #2196F3;
+
+// Status Colors
+$success-color: #28a745;
+$success-color-alt: #4caf50;
+$failure-color: #dc3545;
+$failure-color-alt: #f44336;
+
+// Indicator Colors
+$yellow-indicator: #f3d36c;
+
+// Background Colors
+$hover-bg: #f0f0f0;
+$light-bg: #f5f5f5;
+$tooltip-bg: #555;
+
 .info-panel {
   position: fixed;
   top: 0;
   right: -300px;
   width: 300px;
   height: 100%;
-  background-color: #f9f9f9;
+  background-color: $background-color;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
   transition: right 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
   padding: 20px;
@@ -47,7 +77,7 @@
   .tooltip .tooltiptext {
     visibility: hidden;
     width: 90px;
-    background-color: #555;
+    background-color: $text-color-secondary;
     color: #fff;
     text-align: center;
     padding: 5px 0;
@@ -75,7 +105,7 @@
     margin-left: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: $tooltip-bg transparent transparent transparent;
   }
   
   /* Show the tooltip when hovering */
@@ -92,16 +122,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #555;
+    color: $text-color-secondary;
     transition: color 0.2s, transform 0.2s;
     
     &:hover {
-      color: #007bff;
+      color: $blue-primary;
       transform: scale(1.1);
     }
     
     &.toggled {
-      color: #0056b3;
+      color: $blue-dark;
     }
     
     svg {
@@ -120,17 +150,17 @@
     gap: 8px;
     
     &.active {
-      border-bottom: 2px solid #007bff;
-      color: #007bff;
+      border-bottom: 2px solid $blue-primary;
+      color: $blue-primary;
       
       svg {
-        stroke: #007bff;
+        stroke: $blue-primary;
       }
     }
     
     &.failed-test-tab {
-      background-color: rgba(220, 53, 69, 0.1); // Muted red background
-      border-left: 3px solid #dc3545;
+      background-color: rgba($failure-color, 0.1); // Muted red background
+      border-left: 3px solid $failure-color;
     }
   }
 }
@@ -151,13 +181,13 @@
 
 .info-item strong {
   width: 70px;
-  color: #333;
+  color: $text-color-primary;
 }
 
 .info-item span {
   flex-grow: 1;
   text-align: right;
-  color: #555;
+  color: $text-color-secondary;
 }
 
 .search-input {
@@ -165,7 +195,7 @@
   margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
-  border: 1px solid #ddd;
+  border: 1px solid $border-color;
   border-radius: 4px;
 }
 
@@ -186,13 +216,13 @@
     padding: 8px;
     border-radius: 4px;
     transition: background-color 0.3s;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $border-color;
     display: flex;
     justify-content: space-between;
     align-items: center;
     
     &:hover {
-      background-color: #f0f0f0;
+      background-color: $hover-bg;
     }
   }
 }
@@ -226,15 +256,15 @@
 }
 
 .blue-indicator {
-  background-color: #f3d36c;
+  background-color: $yellow-indicator;
 }
 
 .green-indicator {
-  background-color: #28a745;
+  background-color: $success-color;
 }
 
 .red-indicator {
-  background-color: #dc3545;
+  background-color: $failure-color;
 }
 
 .column-type {
@@ -250,7 +280,7 @@
   border: none;
   font-size: 1.5em;
   cursor: pointer;
-  color: #333;
+  color: $text-color-primary;
   transition: color 0.3s;
 }
 
@@ -305,7 +335,7 @@
 }
 
 .switch input:checked + .slider {
-  background-color: #2196F3;
+  background-color: $blue-tooltip;
 }
 
 .switch input:checked + .slider:before {
@@ -407,19 +437,19 @@
 
 // Unified blue palette
 .id-label {
-  background-color: #0d47a1; // Darkest blue
+  background-color: $blue-darkest; // Darkest blue
 }
 
 .warehouse-label {
-  background-color: #1565c0; // Dark blue
+  background-color: $blue-dark-medium; // Dark blue
 }
 
 .schema-label {
-  background-color: #0288d1; // Medium blue
+  background-color: $blue-medium; // Medium blue
 }
 
 .object-label {
-  background-color: #29b6f6; // Light blue
+  background-color: $blue-light; // Light blue
 }
 
 .ingestion-info {
@@ -438,11 +468,11 @@
   align-items: center;
   
   &.success {
-    color: #4caf50; // Green color for success
+    color: $success-color-alt; // Green color for success
   }
   
   &.failure {
-    color: #f44336; // Red color for failure
+    color: $failure-color-alt; // Red color for failure
   }
 }
 
@@ -456,7 +486,7 @@
   cursor: pointer;
   margin-top: 10px;
   margin-bottom: 8px;
-  background-color: #007bff;
+  background-color: $blue-primary;
   color: #fff;
   padding: 10px;
   border-radius: 4px;
@@ -468,7 +498,7 @@
   transition: all 0.3s ease;
   
   &:hover {
-    background-color: #0056b3;
+    background-color: $blue-dark;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
@@ -490,7 +520,7 @@
 
 // Toggled state styling for model name button
 .model-name-box.toggled {
-  background-color: #0056b3;
+  background-color: $blue-dark;
   box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
@@ -504,7 +534,7 @@
 
 .tabs-header {
   display: flex;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid $border-color;
   margin-bottom: 15px;
 }
 
@@ -529,20 +559,20 @@
   }
   
   &:hover {
-    background-color: #f0f0f0;
+    background-color: $hover-bg;
   }
   
   &.active {
-    border-bottom: 2px solid #007bff;
-    color: #007bff;
+    border-bottom: 2px solid $blue-primary;
+    color: $blue-primary;
   }
   
   &.failed-test-tab {
-    background-color: rgba(220, 53, 69, 0.1); // Muted red background
-    border-left: 3px solid #dc3545;
+    background-color: rgba($failure-color, 0.1); // Muted red background
+    border-left: 3px solid $failure-color;
     
     &:hover {
-      background-color: rgba(220, 53, 69, 0.15); // Slightly darker on hover
+      background-color: rgba($failure-color, 0.15); // Slightly darker on hover
     }
   }
 }
@@ -577,7 +607,7 @@
   
   .test-run-item {
     margin-bottom: 10px;
-    background-color: #f5f5f5;
+    background-color: $light-bg;
     border-radius: 4px;
     overflow: hidden;
     
@@ -606,13 +636,13 @@
       user-select: none;
       
       &.success-text {
-        background-color: rgba(40, 167, 69, 0.1); // Muted green background
-        border-left: 4px solid #28a745;
+        background-color: rgba($success-color, 0.1); // Muted green background
+        border-left: 4px solid $success-color;
       }
       
       &.failure-text {
-        background-color: rgba(220, 53, 69, 0.1); // Muted red background
-        border-left: 4px solid #dc3545;
+        background-color: rgba($failure-color, 0.1); // Muted red background
+        border-left: 4px solid $failure-color;
       }
       
       &:hover {
@@ -624,7 +654,7 @@
         font-size: 0.9em;
         flex-grow: 0;
         margin-right: 8px;
-        color: #555;
+        color: $text-color-secondary;
       }
       
       .test-counter {
@@ -638,7 +668,7 @@
         }
         
         &.failure {
-          color: #dc3545;
+          color: $failure-color;
         }
       }
       
@@ -654,7 +684,7 @@
         }
         
         &.failure {
-          color: #dc3545;
+          color: $failure-color;
         }
       }
       
@@ -716,7 +746,7 @@
             .tooltip-text {
               visibility: hidden;
               width: 100px;
-              background-color: #555;
+              background-color: $text-color-secondary;
               color: #fff;
               text-align: center;
               padding: 5px;
@@ -739,7 +769,7 @@
                 margin-left: -5px;
                 border-width: 5px;
                 border-style: solid;
-                border-color: #555 transparent transparent transparent;
+                border-color: $tooltip-bg transparent transparent transparent;
               }
             }
           }
@@ -766,23 +796,23 @@
             margin-left: auto;
             
             &.success {
-              background-color: rgba(40, 167, 69, 0.15);
+              background-color: rgba($success-color, 0.15);
               color: #28a745;
             }
             
             &.failure {
-              background-color: rgba(220, 53, 69, 0.15);
-              color: #dc3545;
+              background-color: rgba($failure-color, 0.15);
+              color: $failure-color;
             }
           }
         }
         
         .test-error {
           font-size: 0.85em;
-          color: #dc3545;
+          color: $failure-color;
           margin-top: 4px;
           padding: 4px 8px;
-          background-color: rgba(220, 53, 69, 0.05);
+          background-color: rgba($failure-color, 0.05);
           border-radius: 3px;
           font-family: 'Courier New', Courier, monospace;
         }
@@ -817,13 +847,13 @@
     
     // Success/failure background and border styling
     &.success-bg {
-      background-color: rgba(40, 167, 69, 0.1);
-      border-left: 4px solid #28a745;
+      background-color: rgba($success-color, 0.1);
+      border-left: 4px solid $success-color;
     }
     
     &.failure-bg {
-      background-color: rgba(220, 53, 69, 0.1);
-      border-left: 4px solid #dc3545;
+      background-color: rgba($failure-color, 0.1);
+      border-left: 4px solid $failure-color;
     }
     
     .history-header {
@@ -833,7 +863,7 @@
       
       .history-timestamp {
         font-size: 0.9em;
-        color: #555;
+        color: $text-color-secondary;
       }
       
       .status-indicator {
@@ -846,7 +876,7 @@
         }
         
         &.failure {
-          color: #dc3545;
+          color: $failure-color;
         }
       }
     }
@@ -860,7 +890,7 @@
 .no-data {
   padding: 20px;
   text-align: center;
-  color: #777;
+  color: $text-color-tertiary;
   font-style: italic;
 }
 
