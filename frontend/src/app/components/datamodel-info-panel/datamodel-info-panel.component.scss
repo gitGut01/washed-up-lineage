@@ -102,8 +102,55 @@ $tooltip-bg: #555;
   .header-buttons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px; /* Reduced gap between buttons */
     font-size: 0.7em;
+  }
+  
+  /* Close button styling */
+  .close-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    color: rgba(0, 0, 0, 0.6); /* Using opacity for a more subtle effect */
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      color: rgba(0, 0, 0, 0.9); /* Darker on hover */
+    }
+  }
+  
+  /* Special styling for dark backgrounds */
+  &.stored-procedure-header {
+    .close-button, .lineage-button {
+      color: rgba(255, 255, 255, 0.8); /* White with opacity for dark backgrounds */
+      
+      &:hover {
+        color: rgba(255, 255, 255, 1); /* Full white on hover */
+      }
+    }
+    
+    .lineage-button.toggled {
+      color: rgba(255, 255, 255, 1); /* Full white when toggled */
+    }
+  }
+  
+  /* Also apply white buttons to unknown header which has dark background */
+  &.unknown-header {
+    .close-button, .lineage-button {
+      color: rgba(255, 255, 255, 0.8); /* White with opacity for dark backgrounds */
+      
+      &:hover {
+        color: rgba(255, 255, 255, 1); /* Full white on hover */
+      }
+    }
+    
+    .lineage-button.toggled {
+      color: rgba(255, 255, 255, 1); /* Full white when toggled */
+    }
   }
   
   /* Tooltip container */
@@ -157,24 +204,20 @@ $tooltip-bg: #555;
     display: flex;
     align-items: center;
     gap: 6px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
+    background-color: transparent; /* Removed background */
+    border: none; /* Removed border */
     cursor: pointer;
-    padding: 6px 10px;
-    color: $text-color-secondary;
+    padding: 6px 8px;
+    color: rgba(0, 0, 0, 0.6); /* Using opacity for a more subtle effect */
     transition: all 0.2s ease;
     font-size: 0.85em;
     
     &:hover {
-      background-color: rgba(255, 255, 255, 0.3);
-      color: $blue-primary;
+      color: rgba(0, 0, 0, 0.9); /* Darker on hover */
     }
     
     &.toggled {
-      background-color: rgba($blue-dark, 0.2);
-      border-color: $blue-dark;
-      color: $blue-dark;
+      color: rgba(0, 0, 0, 0.9); /* Darker when toggled */
     }
     
     svg {
