@@ -51,4 +51,8 @@ def split_warehouse_schema_object(object_name: str, default_warehouse: str = DEF
                 if k.upper() == warehouse_key:
                     schema = v
                     break
+
+    warehouse = warehouse.replace('[', '').replace(']', '')
+    schema = schema.replace('[', '').replace(']', '')
+    object = object.replace('[', '').replace(']', '')
     return warehouse, schema, object
